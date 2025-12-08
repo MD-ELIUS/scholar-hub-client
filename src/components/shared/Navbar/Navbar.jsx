@@ -1,0 +1,81 @@
+import React, { useState } from 'react';
+import logo from '../../../assets/logo.png'
+import { NavLink } from 'react-router';
+import { FaGraduationCap } from 'react-icons/fa';
+import NavLinkItem from './NavLinkItem';
+import AvatarDropdown from './AvatarDropdown';
+import { CgClose, CgMenuGridR } from 'react-icons/cg';
+
+const Navbar = () => {
+    const user = true ;
+    const [open, setOpen] = useState(false); 
+    const renderLinks = () => (
+  <>
+    <li><NavLinkItem to="/" label="Home" /></li>
+    <li><NavLinkItem to="/scholarships" label="All Scholarships" /></li>
+  </>
+);
+
+    return (
+        <div className='max-w-11/12 mx-auto flex justify-between items-center py-2 '>
+            <div className='flex items-center gap-2'>
+                    <div className='w-10 h-10 lg:w-14 lg:h-14'>
+                <img className='w-full h-full' src={logo} alt="" />
+            </div>
+            <div>
+                <h4 className='text-3xl font-bold text-primary'>Scholar<span className='text-secondary'>Hub</span></h4>
+            </div>
+            </div>
+
+            <navbar className="bg-secondary font-medium py-2 px-10 shadow-md rounded-bl-2xl rounded-tr-2xl hidden lg:flex">
+                  <ul className='flex items-center  gap-4'>
+                       {renderLinks()}
+                  </ul>
+                      
+                    
+            </navbar>
+
+
+               {/* Hamburger Button - Mobile */}
+            <div className='lg:hidden'>
+                <button
+                    onClick={() => setOpen(!open)}
+                    className='text-3xl mt-2 text-primary focus:outline-none'
+                >
+                    {open ? <CgClose /> : <CgMenuGridR />}
+                </button>
+            </div>
+
+            {/* Mobile Menu */}
+<div className={`absolute left-2 right-1/2 top-12.5 my-4 max-w-48 bg-secondary shadow-lg rounded-bl-2xl rounded-tr-2xl
+  transition-all duration-200
+  ${open ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"} lg:hidden`}
+>
+  <ul className='flex flex-col gap-2 font-medium text-lg text-white py-2 mx-2'>
+    {renderLinks(() => setOpen(false))} {/* Close menu on link click */}
+  </ul>
+</div>
+
+
+
+            {
+                user ? <div className=" ">
+  <AvatarDropdown onClick={() => setOpen(true)} />
+</div>
+    :
+    <div className='flex gap-4   '>
+                <button className='btn btn-primary text-black hover:text-white btn-outline rounded-bl-2xl rounded-tr-2xl ' >login</button>
+                 <button className='btn btn-secondary text-black hover:text-white btn-outline rounded-bl-2xl rounded-tr-2xl lg:flex hidden' >register</button>
+            </div>
+            }
+
+            
+
+          
+
+           
+        </div>
+    );
+};
+
+export default Navbar;
