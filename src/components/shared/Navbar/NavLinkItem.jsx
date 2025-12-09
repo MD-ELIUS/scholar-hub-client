@@ -13,7 +13,7 @@ const NavLinkItem = ({ to, label }) => {
         <span className="relative">
           {label}
           <span
-            className={`absolute left-0 -bottom-1 h-[2px] rounded-bl-2xl rounded-tr-2xl bg-[#16756D] transition-all duration-300 
+            className={`absolute left-0 -bottom-1 h-[2px]  bg-[#16756D] transition-all duration-300 
               ${isActive ? "w-full" : "w-0 group-hover:w-full"}`}
           ></span>
         </span>

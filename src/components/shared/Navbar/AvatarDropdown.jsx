@@ -47,7 +47,7 @@ const logout = () => {
       <div
   className={`absolute right-0 mt-4 max-w-48 bg-primary shadow-lg rounded-bl-2xl rounded-tr-2xl 
   transition-all duration-200
-  ${open ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"}`}
+  ${open ? "opacity-100 scale-100 z-50" : "opacity-0 scale-95 pointer-events-none"}`}
 >
   <ul className="flex flex-col gap-2 text-white py-2 mx-2">
 

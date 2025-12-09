@@ -7,7 +7,7 @@ import AvatarDropdown from './AvatarDropdown';
 import { CgClose, CgMenuGridR } from 'react-icons/cg';
 
 const Navbar = () => {
-    const user = true ;
+    const user = false ;
     const [open, setOpen] = useState(false); 
     const renderLinks = () => (
   <>
@@ -49,7 +49,7 @@ const Navbar = () => {
             {/* Mobile Menu */}
 <div className={`absolute left-2 right-1/2 top-12.5 my-4 max-w-48 bg-secondary shadow-lg rounded-bl-2xl rounded-tr-2xl
   transition-all duration-200
-  ${open ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"} lg:hidden`}
+  ${open ? "opacity-100 scale-100 z-50" : "opacity-0 scale-95 pointer-events-none"} lg:hidden`}
 >
   <ul className='flex flex-col gap-2 font-medium text-lg text-white py-2 mx-2'>
     {renderLinks(() => setOpen(false))} {/* Close menu on link click */}
