@@ -24,7 +24,7 @@ const Banner = () => {
 </div>
 
           {/* Lottie Animation Section */}
-      <div className=" h-[250px] md:h-[350px] lg:h-[550px]  lg:mt-0">
+      <div className=" h-[350px] lg:h-[450px] ">
         <Lottie 
           animationData={bannerAnimation} 
           loop={true} 

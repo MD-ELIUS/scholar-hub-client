@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import logo from '../../../assets/logo.png'
-import { NavLink } from 'react-router';
-import { FaGraduationCap } from 'react-icons/fa';
 import NavLinkItem from './NavLinkItem';
 import AvatarDropdown from './AvatarDropdown';
 import { CgClose, CgMenuGridR } from 'react-icons/cg';
+import { FiLogIn, FiUserPlus } from 'react-icons/fi';
+import useAuth from '../../../hooks/useAuth';
+import { Link } from 'react-router';
 
 const Navbar = () => {
-    const user = false ;
+    const {user} = useAuth() ;
     const [open, setOpen] = useState(false); 
     const renderLinks = () => (
   <>
@@ -17,7 +18,7 @@ const Navbar = () => {
 );
 
     return (
-        <div className='max-w-11/12 mx-auto flex justify-between items-center py-2 '>
+        <div className='max-w-11/12 mx-auto flex justify-between items-center py-2'>
             <div className='flex items-center gap-2'>
                     <div className='w-10 h-10 lg:w-14 lg:h-14'>
                 <img className='w-full h-full' src={logo} alt="" />
@@ -63,10 +64,16 @@ const Navbar = () => {
   <AvatarDropdown onClick={() => setOpen(true)} />
 </div>
     :
-    <div className='flex gap-4   '>
-                <button className='btn btn-primary text-black hover:text-white btn-outline rounded-bl-2xl rounded-tr-2xl ' >login</button>
-                 <button className='btn btn-secondary text-black hover:text-white btn-outline rounded-bl-2xl rounded-tr-2xl lg:flex hidden' >register</button>
-            </div>
+    <div className='flex gap-4'>
+  <button className='btn btn-primary text-black hover:text-white btn-outline rounded-bl-2xl rounded-tr-2xl flex items-center gap-2'>
+    <FiLogIn />
+    Login
+  </button>
+  <Link to='/register' className='btn btn-secondary text-black hover:text-white btn-outline rounded-bl-2xl rounded-tr-2xl lg:flex hidden flex items-center gap-2'>
+   <FiUserPlus />
+    Register
+  </Link>
+</div>
             }
 
             

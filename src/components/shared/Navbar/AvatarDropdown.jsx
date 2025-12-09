@@ -1,15 +1,22 @@
 import { LayoutDashboard, LogOut } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { FaGraduationCap } from "react-icons/fa";
+import { FiLogOut } from "react-icons/fi";
 
 
 import { Link } from "react-router";
+import useAuth from "../../../hooks/useAuth";
 
 const AvatarDropdown = () => {
-const user = true ;
-const logout = () => {
-
-}   // ⬅️ Direct access from hook
+const {user, logOut } = useAuth() ;
+ 
+    const handleLogOut = () => {
+        logOut()
+        .then()
+        .catch(error => {
+            console.log(error)
+        })
+    }  // ⬅️ Direct access from hook
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -67,12 +74,12 @@ const logout = () => {
     <li>
       <button
         onClick={() => {
-          logout();
+          handleLogOut(),
           setOpen(false);
         }}
         className="flex items-center gap-2 px-3 py-2 w-full text-lg font-medium btn btn-secondary btn-outline rounded-bl-2xl rounded-tr-2xl "
       >
-        <LogOut size={18} />
+       <FiLogOut />
         <span>Logout</span>
       </button>
     </li>
