@@ -2,6 +2,8 @@ import { LayoutDashboard, LogOut } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { FaGraduationCap } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
+import avatarImg from "../../../assets/avatar.png"; 
+
 
 
 import { Link } from "react-router";
@@ -34,21 +36,18 @@ const {user, logOut } = useAuth() ;
   return (
     <div className="relative" ref={dropdownRef}>
       {/* Avatar Button */}
-      <button
-        onClick={() => setOpen(!open)}
-        className="w-10 h-10 lg:w-14 lg:h-14 rounded-full overflow-hidden border border-gray-300 
-        flex items-center justify-center bg-[#16756D]"
-      >
-        {user?.photoURL ? (
-          <img
-            src={user.photoURL}
-            alt="User"
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <FaGraduationCap className="text-white text-lg" />
-        )}
-      </button>
+<button
+  onClick={() => setOpen(!open)}
+  className="w-10 h-10 lg:w-14 lg:h-14 rounded-full overflow-hidden border border-primary
+  flex items-center justify-center bg-white"
+>
+  <img
+    src={user?.photoURL || avatarImg}
+    alt="User Avatar"
+    className="w-full h-full object-cover"
+  />
+</button>
+
 
       {/* Dropdown */}
       <div

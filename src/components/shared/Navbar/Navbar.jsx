@@ -65,11 +65,11 @@ const Navbar = () => {
 </div>
     :
     <div className='flex gap-4'>
-  <button className='btn btn-primary text-black hover:text-white btn-outline rounded-bl-2xl rounded-tr-2xl flex items-center gap-2'>
+  <Link to='/login' className='btn btn-primary px-2 py-1 text-black hover:text-white btn-outline rounded-bl-2xl rounded-tr-2xl flex items-center gap-2'>
     <FiLogIn />
     Login
-  </button>
-  <Link to='/register' className='btn btn-secondary text-black hover:text-white btn-outline rounded-bl-2xl rounded-tr-2xl lg:flex hidden flex items-center gap-2'>
+  </Link>
+  <Link to='/register' className='btn btn-secondary px-2 py-1 text-black hover:text-white btn-outline rounded-bl-2xl rounded-tr-2xl lg:flex hidden flex items-center gap-2'>
    <FiUserPlus />
     Register
   </Link>

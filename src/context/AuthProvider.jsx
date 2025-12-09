@@ -16,21 +16,21 @@ const AuthProvider = ({children}) => {
 
      // register User
     const registerUser = (email, password) => {
-        setLoading(true);
+       
         return createUserWithEmailAndPassword(auth, email, password)
     }
 
         //Google Sign In 
 
     const signInGoogle = () => {
-        setLoading(true); 
+       
         return signInWithPopup(auth, googleProvider)
     }
 
 
     //Email-Password Login
     const signInUser = (email, password) => {
-        setLoading(true); 
+       
         return signInWithEmailAndPassword(auth, email, password)
     }
 

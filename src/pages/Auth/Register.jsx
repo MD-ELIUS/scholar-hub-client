@@ -10,6 +10,7 @@ import registerAnimation from "../../assets/lottie/register-animation.json"; // 
 import Swal from "sweetalert2";
 import useAuth from '../../hooks/useAuth';
 import axios from 'axios';
+import SocialLogin from './SocialLogin';
 
 const Register = () => {
 
@@ -95,10 +96,10 @@ const Register = () => {
 
     return (
         <div className="w-11/12 mx-auto py-10  flex items-center justify-center">
-            <div className="grid lg:grid-cols-2 gap-10 items-start w-full ">
+            <div className="grid lg:grid-cols-2 gap-0 lg:gap-10 items-start w-full ">
 
                 {/* LEFT SIDE — FORM */}
-                <div className="p-6 bg-white shadow-lg border border-gray-300 rounded-tr-2xl rounded-bl-2xl flex-1">
+                <div className="p-6 bg-white shadow-lg border border-secondary rounded-tr-2xl rounded-bl-2xl flex-1">
                     <h2 className="text-3xl font-bold mb-6 text-center text-primary">Create Your Account</h2>
 
                     <form onSubmit={handleSubmit(handleRegistration)}>
@@ -159,9 +160,9 @@ const Register = () => {
                         </fieldset>
                     </form>
 
-                    {/* <div className="mt-6">
+                    <div className="mt-6">
                         <SocialLogin />
-                    </div> */}
+                    </div>
                 </div>
 
                 {/* RIGHT SIDE — LOTTIE */}
@@ -169,10 +170,10 @@ const Register = () => {
                     <Lottie animationData={registerAnimation} loop={true} className="w-full max-w-lg" />
                 </div>
 
-                {/* MOBILE LOTTIE
+                {/* MOBILE LOTTIE  */}
                 <div className="lg:hidden flex justify-center items-center mt-6">
                     <Lottie animationData={registerAnimation} loop={true} className="w-3/4 max-w-sm" />
-                </div> */}
+                </div>
 
             </div>
         </div>
