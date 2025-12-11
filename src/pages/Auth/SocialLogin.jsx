@@ -3,6 +3,8 @@ import { FcGoogle } from "react-icons/fc";
 
 import { useLocation, useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+
 // import useAxiosSecure from "../../../hooks/useAxiosSecure"; // DB save disabled as requested
 
 const SocialLogin = () => {
@@ -10,6 +12,7 @@ const SocialLogin = () => {
   const { signInGoogle } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const axiosSecure = useAxiosSecure() ;
 
   const handleGoogleSignIn = () => {
     signInGoogle()
@@ -17,7 +20,7 @@ const SocialLogin = () => {
         console.log("Google login user:", result.user);
 
         // --- Save user to DB (COMMENTED as requested) ---
-        /*
+        
         const userInfo = {
           email: result.user.email,
           displayName: result.user.displayName,
@@ -28,7 +31,7 @@ const SocialLogin = () => {
           console.log("User saved in DB:", res.data);
           navigate(location.state || "/");
         });
-        */
+        
 
         navigate(location.state || "/");
       })

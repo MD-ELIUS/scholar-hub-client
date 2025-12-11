@@ -16,21 +16,21 @@ const AuthProvider = ({children}) => {
 
      // register User
     const registerUser = (email, password) => {
-       
+        setLoading(true);
         return createUserWithEmailAndPassword(auth, email, password)
     }
 
         //Google Sign In 
 
     const signInGoogle = () => {
-       
+        setLoading(true); 
         return signInWithPopup(auth, googleProvider)
     }
 
 
     //Email-Password Login
     const signInUser = (email, password) => {
-       
+        setLoading(true); 
         return signInWithEmailAndPassword(auth, email, password)
     }
 
@@ -45,8 +45,15 @@ const AuthProvider = ({children}) => {
     // Update User 
 
     const updateUserProfile = (profile) => {
+         
         return updateProfile(auth.currentUser, profile)
     }
+
+    // Add this function inside AuthProvider
+const updateUserState = (newData) => {
+  setUser(prev => ({ ...prev, ...newData }));
+};
+
 
     
     useEffect(() => {
@@ -67,7 +74,8 @@ const AuthProvider = ({children}) => {
         user, 
         loading,
         logOut,
-       updateUserProfile
+       updateUserProfile,
+       updateUserState
    }
 
     return (

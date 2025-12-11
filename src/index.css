@@ -10,3 +10,28 @@
   --color-primary: #16756D;
   --color-secondary: #F4B400;
 }
+
+
+.swal-title {
+  @apply text-primary;
+}
+
+.swal-text {
+  @apply text-secondary;
+}
+
+.swal-confirm-btn {
+  @apply btn btn-primary text-black hover:text-white  rounded-bl-2xl rounded-tr-2xl btn-outline ;
+}
+
+
+/* Success popup custom look */
+.swal-popup-success {
+  @apply border border-primary/40 shadow-lg rounded-2xl;
+}
+
+/* Optional: success icon color override */
+.swal2-icon.swal2-success {
+  border-color: theme("colors.primary");
+  color: theme("colors.primary");
+}

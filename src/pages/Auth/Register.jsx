@@ -7,10 +7,11 @@ import { useLocation, useNavigate } from 'react-router';
 // import useAxiosSecure from '../../hooks/useAxiosSecure';
 import Lottie from "lottie-react";
 import registerAnimation from "../../assets/lottie/register-animation.json"; // your lottie file
-import Swal from "sweetalert2";
+import Swal from "sweetalert2"; 
 import useAuth from '../../hooks/useAuth';
 import axios from 'axios';
 import SocialLogin from './SocialLogin';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
 
 const Register = () => {
 
@@ -18,6 +19,7 @@ const Register = () => {
     const {registerUser, updateUserProfile} = useAuth();
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const axiosSecure = useAxiosSecure() ;
     // const axiosSecure = useAxiosSecure(); 
     const location = useLocation();
 
@@ -43,19 +45,19 @@ const Register = () => {
                 const photoURL = res.data.data.url;
 
                 // Create user object
-                // const userInfo = {
-                //     email: data.email,
-                //     displayName: data.name,
-                //     photoURL: photoURL,
-                // };
+                const userInfo = {
+                    email: data.email,
+                    displayName: data.name,
+                    photoURL: photoURL,
+                };
 
                 // --- Optional MongoDB save (commented as per request) ---
-                // axiosSecure.post('/users', userInfo)
-                // .then(res => {
-                //     if (res.data.insertedId) {
-                //         console.log('new user created in DB', res.data);
-                //     }
-                // });
+                axiosSecure.post('/users', userInfo)
+                .then(res => {
+                    if (res.data.insertedId) {
+                        console.log('new user created in DB', res.data);
+                    }
+                });
 
                 //3. update Firebase profile
                 const userProfile = {
@@ -66,15 +68,21 @@ const Register = () => {
                 updateUserProfile(userProfile)
                 .then(() => {
                     console.log('user profile updated done');
+                    
+                     navigate(`${location.state ? location.state : "/"}`);
+                   Swal.fire({
+    title: "Account Created!",
+    icon: "success",
+    timer: 1500,
+    showConfirmButton: false,
+    customClass: {
+        title: "swal-title",
+        popup: "swal-popup-success",
+    }
+});
 
-                    Swal.fire({
-                        title: "Account Created!",
-                        icon: "success",
-                        timer: 1500,
-                        showConfirmButton: false,
-                    });
 
-                    navigate(`${location.state ? location.state : "/"}`);
+                   
                 })
                 .catch(err => setError(err.message));
 
@@ -85,11 +93,20 @@ const Register = () => {
             console.log(error);
             setError(error);
 
-            Swal.fire({
-                title: "Registration Failed",
-                text: error.message,
-                icon: "error",
-            });
+        Swal.fire({
+  title: "Registration Failed",
+  text: error.message,
+  icon: "error",
+  customClass: {
+    title: "swal-title",
+    htmlContainer: "swal-text",
+    confirmButton: "swal-confirm-btn",
+  },
+  confirmButtonText: "OK",
+});
+
+
+
         });
     };
 
