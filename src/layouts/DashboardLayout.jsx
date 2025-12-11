@@ -79,7 +79,7 @@ const DashboardLayout = () => {
         >
 
 
-          <div className="flex items-center justify-between px-2 h-16 shadow-md">
+          <div className="flex items-center justify-between px-6 h-16 shadow-md">
 
             {!sidebarCollapsed && <div className='flex items-center gap-2'>
               <div className='w-6 h-6 lg:w-8 lg:h-8'>
@@ -104,8 +104,8 @@ const DashboardLayout = () => {
             </div>
           </div>
 
-          <nav className="mt-6 flex-1 overflow-y-auto">
-            <ul className="flex flex-col gap-2 px-2">
+          <nav className="mt-6 flex-1 overflow-y-auto px-6">
+            <ul className="flex flex-col gap-2 ">
               {/* Sidebar links */}
               {sidebarLinks().map(link => (
     <li key={link.to} className="relative group">
@@ -131,7 +131,7 @@ const DashboardLayout = () => {
                 <Link
                   to="/"
               
-                  className="flex items-center gap-2 px-3 py-2 rounded-tr-2xl rounded-bl-2xl hover:bg-secondary/20 text-primary font-medium"
+                  className="flex items-center gap-2 px-3 py-2 rounded-tr-2xl rounded-bl-2xl hover:bg-secondary/50 text-primary font-medium"
                 >
                   <FiHome />
                   {!sidebarCollapsed && <span>Back to Home</span>}
@@ -142,7 +142,7 @@ const DashboardLayout = () => {
               <li className="mt-4">
                 <Link
                   onClick={handleLogOut}
-                  className="flex items-center gap-2 px-3 py-2 rounded-tr-2xl rounded-bl-2xl hover:bg-secondary/20 text-primary font-medium"
+                  className="flex items-center gap-2 px-3 py-2 rounded-tr-2xl rounded-bl-2xl hover:bg-secondary/50 text-primary font-medium"
                 >
                   <FiLogOut />
                   {!sidebarCollapsed && <span>Logout</span>}
