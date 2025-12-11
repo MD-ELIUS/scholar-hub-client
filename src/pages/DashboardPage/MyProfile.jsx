@@ -6,12 +6,12 @@ import Lottie from "lottie-react";
 
 import useAuth from "../../hooks/useAuth";
 import EditProfileModal from "../../components/dashboard/EditProfileModal";
+import useRole from "../../hooks/useRole";
 
 const MyProfile = () => {
   const { user } = useAuth();
   const [openEdit, setOpenEdit] = useState(false);
-  const role = user?.role || "Admin"; // dynamic role from MongoDB
-
+  const {role} = useRole() ;
   return (
     <div className="w-full flex flex-col lg:flex-row items-center lg:items-start gap-6">
 
