@@ -87,7 +87,7 @@ const ManageUsers = () => {
                 <input
                     type="text"
                     placeholder="Search by name/email"
-                    className="input w-full max-w-xs outline-none border-secondary rounded-bl-2xl rounded-tr-2xl"
+                    className="input w-full max-w-xs outline-none border-secondary/50 rounded-bl-2xl rounded-tr-2xl"
                     onChange={(e) => setSearchText(e.target.value)}
                 />
 

@@ -1,20 +1,47 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import Swal from 'sweetalert2';
-import useAuth from '../../hooks/useAuth';
-import useAxiosSecure from '../../hooks/useAxiosSecure';
-
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import Swal from "sweetalert2";
+import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
 
 const AddScholarship = () => {
-  const { user } = useAuth(); // get logged in user
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { user } = useAuth();
+  const { register, handleSubmit, formState: { errors }, setValue, reset } = useForm();
   const axiosSecure = useAxiosSecure();
+
   const [loading, setLoading] = useState(false);
 
+  // ---------------------- COUNTRY API ----------------------
+  const { data: countryData = [] } = useQuery({
+    queryKey: ["allCountries"],
+    queryFn: async () => {
+      const res = await fetch("https://countriesnow.space/api/v0.1/countries");
+      const data = await res.json();
+      return data.data;
+    },
+  });
+
+  const [countryInput, setCountryInput] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState("");
+
+  const filteredCountries = countryInput
+    ? countryData.filter((c) =>
+        c.country.toLowerCase().includes(countryInput.toLowerCase())
+      )
+    : [];
+
+  const handleCountrySelect = (country) => {
+    setSelectedCountry(country.country);
+    setCountryInput(country.country);
+    setValue("country", country.country);
+  };
+
+  // ---------------------- SUBMIT ----------------------
   const onSubmit = async (data) => {
     setLoading(true);
+
     try {
-      // Prepare final scholarship object
       const scholarship = {
         scholarshipName: data.scholarshipName,
         universityName: data.universityName,
@@ -24,207 +51,239 @@ const AddScholarship = () => {
         subjectCategory: data.subjectCategory,
         scholarshipCategory: data.scholarshipCategory,
         degree: data.degree,
+        tuitionFees: data.tuitionFees || "N/A",
         applicationFees: data.applicationFees,
         serviceCharge: data.serviceCharge,
         totalAmount: data.totalAmount,
         deadline: data.deadline,
-        postDate: new Date().toISOString().split('T')[0], // today
+        postDate: new Date() ,
         userEmail: user.email,
       };
 
-      // Image upload to imgbb
+      // Upload image
       const formData = new FormData();
-      formData.append('image', data.image[0]);
-      const image_APIURL = `https://api.imgbb.com/1/upload?expiration=600&key=${import.meta.env.VITE_image_host_key}`;
-      const imageRes = await fetch(image_APIURL, { method: 'POST', body: formData });
-      const imageResult = await imageRes.json();
-      scholarship.image = imageResult.data.url;
+      formData.append("image", data.image[0]);
 
-      // Send to backend
-      const res = await axiosSecure.post('/scholarships', scholarship);
+      const imgRes = await fetch(
+        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host_key}`,
+        { method: "POST", body: formData }
+      );
+
+      const img = await imgRes.json();
+      scholarship.image = img.data.url;
+
+      // Save to DB
+      const res = await axiosSecure.post("/scholarships", scholarship);
+
       if (res.data.insertedId) {
         Swal.fire({
-          title: 'Scholarship Added!',
-          icon: 'success',
+          title: "Scholarship Added!",
+          icon: "success",
           timer: 1500,
-          showConfirmButton: false
+          showConfirmButton: false,
         });
+        reset()
       }
+
     } catch (err) {
-      console.error(err);
       Swal.fire({
-        title: 'Error!',
+        title: "Error",
         text: err.message,
-        icon: 'error',
-        confirmButtonText: 'OK'
+        icon: "error",
+        confirmButtonText: "OK",
       });
     } finally {
       setLoading(false);
+     
     }
   };
 
+  // Shared style for all inputs
+  const inputStyle =
+    "input outline-none w-full border-primary rounded-bl-2xl rounded-tr-2xl";
+
+  const fileStyle =
+    "file-input outline-none w-full border-primary rounded-bl-2xl rounded-tr-2xl";
+
   return (
     <div className="w-11/12 mx-auto py-10 flex justify-center">
-      <div className="p-6 bg-white shadow-lg border border-secondary rounded-tr-2xl rounded-bl-2xl w-full max-w-3xl">
-        <h2 className="text-3xl font-bold mb-6 text-center text-primary">Add New Scholarship</h2>
+      <div className="p-6 bg-white shadow-lg border border-secondary/50 rounded-tr-2xl rounded-bl-2xl w-full max-w-4xl">
+
+        <h2 className="text-3xl font-bold mb-6 text-center text-primary">
+          Add New Scholarship
+        </h2>
+
         <form onSubmit={handleSubmit(onSubmit)}>
-          <fieldset className="fieldset space-y-4">
+          <fieldset className="space-y-4">
+
             {/* Scholarship Name */}
-            <label className="label">Scholarship Name</label>
-            <input
-              type="text"
-              {...register('scholarshipName', { required: true })}
-              className="input w-full input-bordered border-primary rounded-tr-2xl rounded-bl-2xl"
-              placeholder="Scholarship Name"
-            />
-            {errors.scholarshipName && <p className="text-red-500">Scholarship Name is required</p>}
+            <div>
+              <label className="label">Scholarship Name</label>
+              <input type="text" {...register("scholarshipName", { required: true })} className={inputStyle} />
+            </div>
 
             {/* University Name */}
-            <label className="label">University Name</label>
-            <input
-              type="text"
-              {...register('universityName', { required: true })}
-              className="input w-full input-bordered border-primary rounded-tr-2xl rounded-bl-2xl"
-              placeholder="University Name"
-            />
-            {errors.universityName && <p className="text-red-500">University Name is required</p>}
+            <div>
+              <label className="label">University Name</label>
+              <input type="text" {...register("universityName", { required: true })} className={inputStyle} />
+            </div>
 
             {/* Image */}
-            <label className="label">Image</label>
-            <input
-              type="file"
-              {...register('image', { required: true })}
-              className="file-input file-input-bordered w-full border-primary rounded-tr-2xl rounded-bl-2xl"
-            />
-            {errors.image && <p className="text-red-500">Image is required</p>}
+            <div>
+              <label className="label">Image</label>
+              <input type="file" {...register("image", { required: true })} className={fileStyle} />
+            </div>
 
-            {/* Country & City */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
+                 {/* Country + City */}
+            <div className="grid md:grid-cols-2 gap-4">
+
+              {/* Country */}
+              <div className="relative">
                 <label className="label">Country</label>
                 <input
                   type="text"
-                  {...register('country', { required: true })}
-                  className="input w-full input-bordered border-primary rounded-tr-2xl rounded-bl-2xl"
-                  placeholder="Country"
+                  {...register("country", { required: true })}
+                  placeholder="Start typing country..."
+                  value={countryInput}
+                  onChange={(e) => {
+                    setCountryInput(e.target.value);
+                    setSelectedCountry("");
+                  }}
+                  className={inputStyle}
                 />
-                {errors.country && <p className="text-red-500">Country is required</p>}
+
+                {/* Suggestions */}
+                {countryInput && !selectedCountry && (
+                  <div className="border bg-white rounded-lg mt-1 max-h-40 overflow-y-auto absolute w-full z-50">
+                    {filteredCountries.map((c, i) => (
+                      <p
+                        key={i}
+                        onClick={() => handleCountrySelect(c)}
+                        className="px-3 py-2 hover:bg-gray-200 cursor-pointer"
+                      >
+                        {c.country}
+                      </p>
+                    ))}
+                  </div>
+                )}
               </div>
+
+              {/* City - Disabled until country selected */}
               <div>
-                <label className="label">City</label>
+                <label className="label">City (manual)</label>
                 <input
                   type="text"
-                  {...register('city', { required: true })}
-                  className="input w-full input-bordered border-primary rounded-tr-2xl rounded-bl-2xl"
-                  placeholder="City"
+                  {...register("city", { required: true })}
+                  placeholder={selectedCountry ? "Type city" : "Select country first"}
+                  disabled={!selectedCountry}
+                  className={`${inputStyle} ${!selectedCountry ? "bg-gray-200 cursor-not-allowed" : ""}`}
                 />
-                {errors.city && <p className="text-red-500">City is required</p>}
+              </div>
+
+            </div>
+
+
+            {/* World Rank + Degree */}
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="label">World Rank</label>
+                <input type="number" {...register("worldRank", { required: true })} className={inputStyle} />
+              </div>
+
+             {/* Degree */}
+<div>
+  <label className="label">Degree</label>
+  <select
+    {...register("degree", { required: true })}
+    className="select w-full border-primary rounded-bl-2xl rounded-tr-2xl"
+  >
+    <option value="">Select Degree</option>
+    <option value="Bachelor">Bachelor</option>
+    <option value="Master">Postgraduate</option>
+    <option value="PhD">PhD</option>
+    <option value="Diploma">Diploma</option>
+    {/* add more degrees as needed */}
+  </select>
+</div>
+            </div>
+
+            {/* Subject + Scholarship Category */}
+            <div className="grid md:grid-cols-2 gap-4">
+              {/* Subject Category */}
+<div>
+  <label className="label">Subject Category</label>
+  <select
+    {...register("subjectCategory", { required: true })}
+    className="select w-full border-primary rounded-bl-2xl rounded-tr-2xl"
+  >
+    <option value="">Select Subject Category</option>
+    <option value="Engineering">Engineering</option>
+    <option value="Medical">Medical</option>
+    <option value="Business">Business</option>
+    <option value="Arts">Arts</option>
+    <option value="Science">Science</option>
+    {/* add more subjects as needed */}
+  </select>
+</div>
+
+{/* Scholarship Category */}
+<div>
+  <label className="label">Scholarship Category</label>
+  <select
+    {...register("scholarshipCategory", { required: true })}
+    className="select w-full border-primary rounded-bl-2xl rounded-tr-2xl"
+  >
+    <option value="">Select Scholarship Category</option>
+    <option value="Merit-based">Fully Funded</option>
+    <option value="Need-based">Partially Funded</option>
+    <option value="Sports">Tuition Only</option>
+    <option value="Research">Living Expenses Covered</option>
+    {/* add more categories as needed */}
+  </select>
+</div>
+            </div>
+
+            {/* Tuition Fees + Total Amount */}
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="label">Tuition Fees (optional)</label>
+                <input type="number" {...register("tuitionFees")} className={inputStyle} />
+              </div>
+
+              <div>
+                <label className="label">Total Amount</label>
+                <input type="number" {...register("totalAmount", { required: true })} className={inputStyle} />
               </div>
             </div>
 
-            {/* World Rank */}
-            <label className="label">World Rank</label>
-            <input
-              type="number"
-              {...register('worldRank', { required: true })}
-              className="input w-full input-bordered border-primary rounded-tr-2xl rounded-bl-2xl"
-              placeholder="World Rank"
-            />
-            {errors.worldRank && <p className="text-red-500">World Rank is required</p>}
-
-            {/* Subject & Scholarship Category */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="label">Subject Category</label>
-                <input
-                  type="text"
-                  {...register('subjectCategory', { required: true })}
-                  className="input w-full input-bordered border-primary rounded-tr-2xl rounded-bl-2xl"
-                  placeholder="Subject Category"
-                />
-                {errors.subjectCategory && <p className="text-red-500">Subject Category is required</p>}
-              </div>
-              <div>
-                <label className="label">Scholarship Category</label>
-                <input
-                  type="text"
-                  {...register('scholarshipCategory', { required: true })}
-                  className="input w-full input-bordered border-primary rounded-tr-2xl rounded-bl-2xl"
-                  placeholder="Scholarship Category"
-                />
-                {errors.scholarshipCategory && <p className="text-red-500">Scholarship Category is required</p>}
-              </div>
-            </div>
-
-            {/* Degree */}
-            <label className="label">Degree</label>
-            <input
-              type="text"
-              {...register('degree', { required: true })}
-              className="input w-full input-bordered border-primary rounded-tr-2xl rounded-bl-2xl"
-              placeholder="Degree"
-            />
-            {errors.degree && <p className="text-red-500">Degree is required</p>}
-
-            {/* Application Fees & Service Charge */}
-            <div className="grid grid-cols-2 gap-4">
+            {/* Application Fees + Service Charge */}
+            <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <label className="label">Application Fees</label>
-                <input
-                  type="number"
-                  {...register('applicationFees', { required: true })}
-                  className="input w-full input-bordered border-primary rounded-tr-2xl rounded-bl-2xl"
-                  placeholder="Application Fees"
-                />
-                {errors.applicationFees && <p className="text-red-500">Application Fees is required</p>}
+                <input type="number" {...register("applicationFees", { required: true })} className={inputStyle} />
               </div>
+
               <div>
                 <label className="label">Service Charge</label>
-                <input
-                  type="number"
-                  {...register('serviceCharge', { required: true })}
-                  className="input w-full input-bordered border-primary rounded-tr-2xl rounded-bl-2xl"
-                  placeholder="Service Charge"
-                />
-                {errors.serviceCharge && <p className="text-red-500">Service Charge is required</p>}
+                <input type="number" {...register("serviceCharge", { required: true })} className={inputStyle} />
               </div>
             </div>
 
-            {/* Total Amount */}
-            <label className="label">Total Amount</label>
-            <input
-              type="number"
-              {...register('totalAmount', { required: true })}
-              className="input w-full input-bordered border-primary rounded-tr-2xl rounded-bl-2xl"
-              placeholder="Total Amount"
-            />
-            {errors.totalAmount && <p className="text-red-500">Total Amount is required</p>}
-
+       
             {/* Deadline */}
-            <label className="label">Deadline</label>
-            <input
-              type="date"
-              {...register('deadline', { required: true })}
-              className="input w-full input-bordered border-primary rounded-tr-2xl rounded-bl-2xl"
-            />
-            {errors.deadline && <p className="text-red-500">Deadline is required</p>}
+            <div>
+              <label className="label">Deadline</label>
+              <input type="date" {...register("deadline", { required: true })} className={inputStyle} />
+            </div>
 
-            {/* User Email (read-only) */}
-            <label className="label">User Email</label>
-            <input
-              type="email"
-              value={user.email}
-              readOnly
-              className="input w-full input-bordered border-primary rounded-tr-2xl rounded-bl-2xl bg-gray-100"
-            />
+            {/* User Email */}
+            <div>
+              <label className="label">User Email</label>
+              <input type="email" value={user.email} readOnly className={`${inputStyle} bg-gray-200`} />
+            </div>
 
-            {/* Submit */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn btn-secondary btn-outline mt-4 w-full text-black hover:text-white font-semibold rounded-tr-2xl rounded-bl-2xl"
-            >
-              {loading ? 'Adding...' : 'Add Scholarship'}
+            <button type="submit" disabled={loading} className="btn btn-secondary w-full mt-4">
+              {loading ? "Adding..." : "Add Scholarship"}
             </button>
           </fieldset>
         </form>

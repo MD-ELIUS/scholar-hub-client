@@ -13,7 +13,7 @@ const Navbar = () => {
     const renderLinks = () => (
   <>
     <li><NavLinkItem to="/" label="Home" /></li>
-    <li><NavLinkItem to="/scholarships" label="All Scholarships" /></li>
+    <li><NavLinkItem to="/all-scholarships" label="All Scholarships" /></li>
   </>
 );
 

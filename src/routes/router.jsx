@@ -10,6 +10,8 @@ import PrivateRoute from "./PrivateRoute";
 import ManageUsers from "../pages/Admin/ManageUsers";
 import AdminRoute from "./AdminRoute";
 import AddScholarship from "../pages/Admin/AddScholarship";
+import ManageScholarships from "../pages/Admin/ManageScholarships";
+import AllScholarshipsPage from "../pages/AllScholarshipPage/AllScholarshipsPage";
 
 export const router = createBrowserRouter([
   {
@@ -19,6 +21,10 @@ export const router = createBrowserRouter([
         {
             index: true,
             Component: Home
+        },
+        {
+          path: '/all-scholarships',
+          Component: AllScholarshipsPage
         },
         {
             path:'/register',
@@ -45,6 +51,10 @@ export const router = createBrowserRouter([
          {
           path: 'add-scholarship',
           Component: AddScholarship
+        },
+        {
+          path: 'manage-scholarships',
+          Component: ManageScholarships
         },
         {
           path: 'manage-users',

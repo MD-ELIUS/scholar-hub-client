@@ -24,7 +24,7 @@ const MyProfile = () => {
 
       {/* Profile Info */}
       <div className="w-full lg:w-1/2">
-        <div className="bg-white shadow-lg rounded-bl-2xl rounded-tr-2xl p-6 border border-primary/20">
+        <div className="bg-white shadow-lg rounded-bl-2xl rounded-tr-2xl p-6 border border-secondary/50">
           
           {/* Header */}
           <div className="flex items-center gap-4">
