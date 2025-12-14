@@ -42,23 +42,27 @@ const AddScholarship = () => {
     setLoading(true);
 
     try {
-      const scholarship = {
-        scholarshipName: data.scholarshipName,
-        universityName: data.universityName,
-        country: data.country,
-        city: data.city,
-        worldRank: data.worldRank,
-        subjectCategory: data.subjectCategory,
-        scholarshipCategory: data.scholarshipCategory,
-        degree: data.degree,
-        tuitionFees: data.tuitionFees || "N/A",
-        applicationFees: data.applicationFees,
-        serviceCharge: data.serviceCharge,
-        totalAmount: data.totalAmount,
-        deadline: data.deadline,
-        postDate: new Date() ,
-        userEmail: user.email,
-      };
+    const scholarship = {
+  scholarshipName: data.scholarshipName,
+  universityName: data.universityName,
+  country: data.country,
+  city: data.city,
+  worldRank: data.worldRank,
+  subjectCategory: data.subjectCategory,
+  scholarshipCategory: data.scholarshipCategory,
+  degree: data.degree,
+
+  applicationFees: data.applicationFees,
+  serviceCharge: data.serviceCharge,
+  totalAmount: data.totalAmount,
+
+  description: data.description, // ✅ ADDED
+
+  deadline: data.deadline,
+  postDate: new Date(),
+  userEmail: user.email,
+};
+
 
       // Upload image
       const formData = new FormData();
@@ -226,6 +230,8 @@ const AddScholarship = () => {
   </select>
 </div>
 
+
+
 {/* Scholarship Category */}
 <div>
   <label className="label">Scholarship Category</label>
@@ -242,6 +248,23 @@ const AddScholarship = () => {
   </select>
 </div>
             </div>
+
+            
+{/* Scholarship Description */}
+<div>
+  <label className="label">
+    Scholarship Description
+  </label>
+  <textarea
+    {...register("description", { required: true })}
+    rows={8}
+    placeholder="Enter full scholarship details (eligibility, benefits, application process, documents, etc.)"
+    className="textarea outline-none w-full border-primary rounded-bl-2xl rounded-tr-2xl"
+  />
+  {errors.description && (
+    <p className="text-red-500 text-sm mt-1">Description is required</p>
+  )}
+</div>
 
             {/* Tuition Fees + Total Amount */}
             <div className="grid md:grid-cols-2 gap-4">

@@ -12,8 +12,8 @@ const DashboardLayout = () => {
   const { user, logOut, loading } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false); // mobile
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false); // desktop
-  // const role = "Admin";
-  const { role, roleLoading } = useRole();
+  // const role = "Admin"; 
+  const { role, roleLoading } = useRole(); 
 
   const handleLogOut = () => {
     logOut()
@@ -36,7 +36,7 @@ const DashboardLayout = () => {
       return [
         { label: 'My Profile', to: '/dashboard/profile', icon: <UserCheck size={18} /> },
         { label: 'Manage Applications', to: '/dashboard/manage-applications', icon: <BookOpen size={18} /> },
-        { label: 'All Reviews', to: '/dashboard/reviews', icon: <BookOpen size={18} /> },
+        { label: 'All Reviews', to: '/dashboard/all-reviews', icon: <BookOpen size={18} /> },
       ];
     } else if (role === 'student') {
       return [
