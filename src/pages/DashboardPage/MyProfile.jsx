@@ -38,7 +38,7 @@ const MyProfile = () => {
 
             <div>
               <h1 className="text-2xl font-bold text-primary">{user?.displayName}</h1>
-              <span className="px-3 py-1 rounded-full text-sm bg-secondary/20 text-secondary font-medium">
+              <span className="px-3 py-1 rounded-bl-2xl rounded-tr-2xl text-sm bg-secondary/20 text-secondary font-medium">
                 {role}
               </span>
             </div>
