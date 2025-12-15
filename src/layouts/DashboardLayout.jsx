@@ -13,7 +13,7 @@ const DashboardLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false); // mobile
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false); // desktop
   // const role = "Admin"; 
-  const { role, roleLoading } = useRole(); 
+  const { role, roleLoading } = useRole();
 
   const handleLogOut = () => {
     logOut()
@@ -26,6 +26,8 @@ const DashboardLayout = () => {
 
     if (role === 'admin') {
       return [
+
+        { label: 'My Dashboard', to: '/dashboard', icon: <LayoutDashboard size={18} /> },
         { label: 'My Profile', to: '/dashboard/profile', icon: <UserCheck size={18} /> },
         { label: 'Add Scholarship', to: '/dashboard/add-scholarship', icon: <BookOpen size={18} /> },
         { label: 'Manage Scholarships', to: '/dashboard/manage-scholarships', icon: <BookOpen size={18} /> },
@@ -34,12 +36,14 @@ const DashboardLayout = () => {
       ];
     } else if (role === 'moderator') {
       return [
+        { label: 'My Dashboard', to: '/dashboard', icon: <LayoutDashboard size={18} /> },
         { label: 'My Profile', to: '/dashboard/profile', icon: <UserCheck size={18} /> },
         { label: 'Manage Applications', to: '/dashboard/manage-applications', icon: <BookOpen size={18} /> },
         { label: 'All Reviews', to: '/dashboard/all-reviews', icon: <BookOpen size={18} /> },
       ];
     } else if (role === 'student') {
       return [
+        { label: 'My Dashboard', to: '/dashboard', icon: <LayoutDashboard size={18} /> },
         { label: 'My Profile', to: '/dashboard/profile', icon: <UserCheck size={18} /> },
         { label: 'My Applications', to: '/dashboard/my-applications', icon: <BookOpen size={18} /> },
         { label: 'My Reviews', to: '/dashboard/my-reviews', icon: <BookOpen size={18} /> },
@@ -108,29 +112,29 @@ const DashboardLayout = () => {
             <ul className="flex flex-col gap-2 ">
               {/* Sidebar links */}
               {sidebarLinks().map(link => (
-    <li key={link.to} className="relative group">
-  <NavLink
-    to={link.to}
-    onClick={() => setSidebarOpen(false)}
-         data-tip={`${link.label}`}
-    className={({ isActive }) =>
-      `flex items-center gap-2 px-3 py-2 rounded-tr-2xl rounded-bl-2xl text-primary font-medium
-       hover:bg-secondary/50
-       ${isActive ? 'bg-secondary/50' : ''}`
-    }
-  >
-    {link.icon}
-    {!sidebarCollapsed && <span>{link.label}</span>}
-  </NavLink>
-
-</li>
-
+                <li key={link.to} className="relative group">
+                  <NavLink
+                    to={link.to}
+                    end={link.to === '/dashboard'} // only exact for dashboard home
+                    onClick={() => setSidebarOpen(false)}
+                    data-tip={`${link.label}`}
+                    className={({ isActive }) =>
+                      `flex items-center gap-2 px-3 py-2 rounded-tr-2xl rounded-bl-2xl text-primary font-medium
+         hover:bg-secondary/50
+         ${isActive ? 'bg-secondary/50' : ''}`
+                    }
+                  >
+                    {link.icon}
+                    {!sidebarCollapsed && <span>{link.label}</span>}
+                  </NavLink>
+                </li>
               ))}
+
 
               <li className="mt-4">
                 <Link
                   to="/"
-              
+
                   className="flex items-center gap-2 px-3 py-2 rounded-tr-2xl rounded-bl-2xl hover:bg-secondary/50 text-primary font-medium"
                 >
                   <FiHome />
@@ -173,7 +177,7 @@ const DashboardLayout = () => {
             </button>
             <div className='flex flex-col items-center'>
               <h1 className="text-2xl font-bold text-primary capitalize">{role} Dashboard</h1>
-              <h2>Welcome {user.displayName}</h2>
+              <h2 className='text-secondary'>Welcome {user.displayName}</h2>
             </div>
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-full overflow-hidden border border-primary">

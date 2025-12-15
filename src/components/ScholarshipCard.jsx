@@ -1,7 +1,33 @@
 import React from "react";
 import { Link } from "react-router";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import useAuth from "../hooks/useAuth";
+
 
 const ScholarshipCard = ({ scholarship }) => {
+  const { user } = useAuth();
+
+  // ✅ check if current user already applied for this scholarship
+  const { data: appliedApplication } = useQuery({
+    queryKey: ["applied-check", scholarship._id, user?.email],
+    enabled: !!user?.email && !!scholarship?._id,
+    queryFn: async () => {
+      const res = await axios.get(
+        "http://localhost:3000/applications/check",
+        {
+          params: {
+            scholarshipId: scholarship._id,
+            userEmail: user.email,
+          },
+        }
+      );
+      return res.data; // null or application object
+    },
+  });
+
+  const isApplied = !!appliedApplication;
+
   return (
     <div className="relative bg-white shadow-lg rounded-2xl overflow-hidden border border-secondary/30 hover:shadow-xl transition duration-300 h-full flex flex-col">
       
@@ -18,6 +44,15 @@ const ScholarshipCard = ({ scholarship }) => {
         </span>
       </div>
 
+      {/* ✅ Applied Badge (from applications collection) */}
+      {isApplied && (
+        <div className="absolute top-3 right-3 z-10">
+          <span className="bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-bl-2xl rounded-tr-2xl shadow-md">
+            Applied
+          </span>
+        </div>
+      )}
+
       {/* Image */}
       <div className="h-48 w-full overflow-hidden">
         <img
@@ -29,23 +64,18 @@ const ScholarshipCard = ({ scholarship }) => {
 
       {/* Content */}
       <div className="p-4 flex flex-col gap-2 flex-grow">
-
-        {/* SCHOLARSHIP NAME → TOP */}
         <h3 className="text-lg font-semibold text-primary truncate">
           {scholarship.scholarshipName}
         </h3>
 
-        {/* UNIVERSITY NAME → BELOW */}
         <h4 className="text-md font-medium text-secondary truncate">
           {scholarship.universityName}
         </h4>
 
-        {/* LOCATION */}
         <p className="text-sm text-secondary truncate">
           {scholarship.country}, {scholarship.city || ""}
         </p>
 
-        {/* FEES */}
         {scholarship.applicationFees && (
           <p className="text-sm text-primary font-medium truncate">
             Application Fees: ${scholarship.applicationFees}
@@ -62,7 +92,6 @@ const ScholarshipCard = ({ scholarship }) => {
           View Details
         </Link>
       </div>
-
     </div>
   );
 };

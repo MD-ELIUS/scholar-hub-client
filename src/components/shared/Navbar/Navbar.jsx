@@ -10,12 +10,13 @@ import { Link } from 'react-router';
 const Navbar = () => {
     const {user} = useAuth() ;
     const [open, setOpen] = useState(false); 
-    const renderLinks = () => (
+    const renderLinks =
   <>
-    <li><NavLinkItem to="/" label="Home" /></li>
-    <li><NavLinkItem to="/all-scholarships" label="All Scholarships" /></li>
+   <li><NavLinkItem onClick={() => setOpen(false)} to="/" label="Home" /></li>
+<li><NavLinkItem onClick={() => setOpen(false)} to="/all-scholarships" label="All Scholarships" /></li>
+
   </>
-);
+;
 
     return (
         <div className='max-w-11/12 mx-auto flex justify-between items-center py-2'>
@@ -30,7 +31,7 @@ const Navbar = () => {
 
             <navbar className="bg-secondary font-medium py-2 px-10 shadow-md rounded-bl-2xl rounded-tr-2xl hidden lg:flex">
                   <ul className='flex items-center  gap-4'>
-                       {renderLinks()}
+                       {renderLinks}
                   </ul>
                       
                     
@@ -53,7 +54,7 @@ const Navbar = () => {
   ${open ? "opacity-100 scale-100 z-50" : "opacity-0 scale-95 pointer-events-none"} lg:hidden`}
 >
   <ul className='flex flex-col gap-2 font-medium text-lg text-white py-2 mx-2'>
-    {renderLinks(() => setOpen(false))} {/* Close menu on link click */}
+    {renderLinks} {/* Close menu on link click */}
   </ul>
 </div>
 
