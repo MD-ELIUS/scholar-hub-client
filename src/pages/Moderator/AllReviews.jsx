@@ -97,7 +97,7 @@ const AllReviews = () => {
                                 <td className="text-center">
                                     <div className="flex justify-center">
                                         <Rating
-                                            style={{ maxWidth: 220, width: "100%" }} // maxWidth control + responsive
+                                            style={{ minWidth: 80, maxWidth: 120, width: "100%" }} // maxWidth control + responsive
                                             value={review.ratingPoint}
                                             readOnly
                                         />

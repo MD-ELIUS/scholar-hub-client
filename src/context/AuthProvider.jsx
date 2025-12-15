@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
 import { auth } from '../firebase/firebase.init';
 import { AuthContext } from './AuthContext';
+import axios from 'axios';
 
 
 
@@ -57,8 +58,28 @@ const updateUserState = (newData) => {
 
     
     useEffect(() => {
-        const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
+        const unSubscribe = onAuthStateChanged(auth, async (currentUser) => {
             setUser(currentUser);
+
+               if (currentUser) {
+      const loggedUser = { email: currentUser.email };
+      console.log('logged user', loggedUser)
+
+      try {
+        const res = await axios.post(
+          "http://localhost:3000/getToken",
+          loggedUser
+        );
+
+        console.log("after getting token", res.data);
+        localStorage.setItem("token", res.data.token);
+      } catch (error) {
+        console.error("Token error:", error);
+      }
+    } else {
+      localStorage.removeItem("token");
+    }
+
             setLoading(false);
         });
 

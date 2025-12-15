@@ -157,7 +157,7 @@ const ManageApplications = () => {
                                         </button>
 
                                         <select
-                                            className="select select-bordered select-sm"
+                                            className="select select-bordered rounded-bl-2xl rounded-tr-2xl select-sm"
                                             value={app.applicationStatus}
                                             onChange={(e) => updateStatus(app, e.target.value)}
                                         >
@@ -223,20 +223,20 @@ const ManageApplications = () => {
                             Give Feedback for {selectedApplication.userName}
                         </h3>
                         <textarea
-                            className="textarea w-full border-secondary/50 rounded-lg mb-4"
+                            className="textarea outline-none w-full border-secondary/50 rounded-bl-2xl rounded-tr-2xl mb-4"
                             rows={5}
                             value={feedbackText}
                             onChange={(e) => setFeedbackText(e.target.value)}
                         ></textarea>
                         <div className="flex justify-end gap-2">
                             <button
-                                className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg"
+                                className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-bl-2xl rounded-tr-2xl"
                                 onClick={() => setIsFeedbackModalOpen(false)}
                             >
                                 Cancel
                             </button>
                             <button
-                                className="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-lg"
+                                className="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-bl-2xl rounded-tr-2xl"
                                 onClick={submitFeedback}
                             >
                                 Submit Feedback

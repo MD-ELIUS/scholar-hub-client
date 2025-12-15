@@ -17,7 +17,7 @@ const useAxiosSecure = () => {
         // intercept request
         const requestInterceptor =    axiosSecure.interceptors.request.use(config => {
 
-                config.headers.authorization = `Bearer ${user?.accessToken}`  
+              config.headers.authorization = `Bearer ${localStorage.getItem("token")}`  
 
                 return config
 
