@@ -170,7 +170,7 @@ const StudentHome = () => {
           className="bg-white shadow-md rounded-bl-2xl rounded-tr-2xl border border-secondary/50 p-6"
         >
           <h2 className="text-lg text-primary font-semibold mb-4 text-center">
-            Money Spent (Latest 4 Applications)
+            Latest Applications
           </h2>
 
           <div

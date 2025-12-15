@@ -20,6 +20,8 @@ import MyApplications from "../pages/Student/MyApplications";
 import MyReviews from "../pages/Student/MyReviews";
 import ManageApplications from "../pages/Moderator/ManageApplications";
 import AllReviews from "../pages/Moderator/AllReviews";
+import StudentRoute from "./StudentRoute";
+import ModeratorRoute from "./ModeratorRoute";
 
 export const router = createBrowserRouter([
   {
@@ -62,31 +64,31 @@ export const router = createBrowserRouter([
       },
       {
         path: 'add-scholarship',
-        Component: AddScholarship
+        element: <AdminRoute><AddScholarship></AddScholarship></AdminRoute>
       },
       {
         path: 'manage-scholarships',
-        Component: ManageScholarships
+       element: <AdminRoute><ManageScholarships></ManageScholarships></AdminRoute>
       },
       {
         path: 'manage-users',
-        element: <ManageUsers></ManageUsers>
+        element: <AdminRoute><ManageUsers></ManageUsers></AdminRoute>
       },
       {
         path: 'manage-applications',
-        element: <ManageApplications></ManageApplications>
+        element: <ModeratorRoute><ManageApplications></ManageApplications></ModeratorRoute>
       },
       {
         path: 'all-reviews',
-        element: <AllReviews></AllReviews>
+        element: <ModeratorRoute><AllReviews></AllReviews></ModeratorRoute>
       },
       {
         path: 'my-applications',
-        element: <MyApplications></MyApplications>
+        element: <StudentRoute><MyApplications></MyApplications></StudentRoute>
       },
       {
         path: 'my-reviews',
-        element: <MyReviews></MyReviews>
+        element: <StudentRoute><MyReviews></MyReviews></StudentRoute>
       },
       {
         path: 'payment/:scholarshipId',

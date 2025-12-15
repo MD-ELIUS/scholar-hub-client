@@ -21,11 +21,11 @@ const Forbidden = () => {
         Please contact the administrator if you believe this is an error.
       </p>
       <div className="my-3 space-x-3">
-        <Link to="/" className="btn btn-primary text-black">
+        <Link to="/" className="btn btn-primary rounded-bl-2xl rounded-tr-2xl btn-outline hover:text-white text-black">
           {" "}
           Go to Home
         </Link>
-        <Link className="btn btn-secondary" to="/dashboard">
+        <Link className="btn btn-secondary rounded-bl-2xl rounded-tr-2xl btn-outline hover:text-white text-black" to="/dashboard">
           {" "}
           Go to Dashboard
         </Link>

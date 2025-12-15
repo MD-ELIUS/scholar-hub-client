@@ -87,7 +87,7 @@ const ScholarshipCard = ({ scholarship }) => {
       <div className="p-4 pt-0 mt-auto">
         <Link
           to={`/scholarships/${scholarship._id}`}
-          className="block w-full text-center bg-secondary text-white py-2 rounded-tr-2xl rounded-bl-2xl hover:bg-secondary/80 transition duration-300"
+          className="w-full  rounded-tr-2xl rounded-bl-2xl btn btn-secondary btn-outline text-black hover:text-white "
         >
           View Details
         </Link>

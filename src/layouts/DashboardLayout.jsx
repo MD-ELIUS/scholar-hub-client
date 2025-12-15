@@ -77,7 +77,7 @@ const DashboardLayout = () => {
      inset-y-0 
     ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
 
-    lg:static lg:translate-x-0
+    lg:sticky lg:top-0 lg:h-screen lg:translate-x-0
     ${sidebarCollapsed ? "lg:col-span-1" : "lg:col-span-3"}
   `}
         >
@@ -108,7 +108,7 @@ const DashboardLayout = () => {
             </div>
           </div>
 
-          <nav className="mt-6 flex-1 overflow-y-auto px-6">
+          <nav className={`mt-6 flex-1 px-6 ${sidebarCollapsed ? 'overflow-visible' : 'overflow-y-auto'}`}>
             <ul className="flex flex-col gap-2 ">
               {/* Sidebar links */}
               {sidebarLinks().map(link => (
@@ -127,11 +127,17 @@ const DashboardLayout = () => {
                     {link.icon}
                     {!sidebarCollapsed && <span>{link.label}</span>}
                   </NavLink>
+                  {/* Tooltip */}
+                  {sidebarCollapsed && (
+                    <div className="absolute left-full top-1/2 ml-2 -translate-y-1/2 bg-primary text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity z-50 whitespace-nowrap pointer-events-none shadow-md">
+                      {link.label}
+                    </div>
+                  )}
                 </li>
               ))}
 
 
-              <li className="mt-4">
+              <li className="mt-4 relative group">
                 <Link
                   to="/"
 
@@ -140,10 +146,15 @@ const DashboardLayout = () => {
                   <FiHome />
                   {!sidebarCollapsed && <span>Back to Home</span>}
                 </Link>
+                {sidebarCollapsed && (
+                  <div className="absolute left-full top-1/2 ml-2 -translate-y-1/2 bg-primary text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity z-50 whitespace-nowrap pointer-events-none shadow-md">
+                    Back to Home
+                  </div>
+                )}
               </li>
 
 
-              <li className="mt-4">
+              <li className="mt-4 relative group">
                 <Link
                   onClick={handleLogOut}
                   className="flex items-center gap-2 px-3 py-2 rounded-tr-2xl rounded-bl-2xl hover:bg-secondary/50 text-primary font-medium"
@@ -151,6 +162,11 @@ const DashboardLayout = () => {
                   <FiLogOut />
                   {!sidebarCollapsed && <span>Logout</span>}
                 </Link>
+                {sidebarCollapsed && (
+                  <div className="absolute left-full top-1/2 ml-2 -translate-y-1/2 bg-primary text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity z-50 whitespace-nowrap pointer-events-none shadow-md">
+                    Logout
+                  </div>
+                )}
               </li>
 
 
@@ -176,8 +192,11 @@ const DashboardLayout = () => {
               ☰
             </button>
             <div className='flex flex-col items-center'>
-              <h1 className="text-2xl font-bold text-primary capitalize">{role} Dashboard</h1>
-              <h2 className='text-secondary'>Welcome {user.displayName}</h2>
+              <h1 className="text-lg sm:text-xl md:text-2xl  font-bold text-primary capitalize">
+                {role} Dashboard
+              </h1>
+
+              <h2 className='text-secondary text-sm sm:text-base md:text-lg'>Welcome {user.displayName}</h2>
             </div>
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-full overflow-hidden border border-primary">
