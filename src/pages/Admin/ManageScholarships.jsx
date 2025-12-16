@@ -6,6 +6,7 @@ import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import EditScholarshipModal from "./EditScholarshipModal"; // import the modal
 import { IoClose } from "react-icons/io5";
+import LoadingData from "../../components/Loading/LoadingData";
 
 const ManageScholarships = () => {
   const axiosSecure = useAxiosSecure();
@@ -69,6 +70,8 @@ const ManageScholarships = () => {
     setIsModalOpen(false);
     setEditingScholarship(null);
   };
+
+
 
   return (
     <div className="w-full p-6 bg-white shadow-lg border border-secondary/50 rounded-tr-2xl rounded-bl-2xl">

@@ -305,7 +305,7 @@ const AddScholarship = () => {
               <input type="email" value={user.email} readOnly className={`${inputStyle} bg-gray-200`} />
             </div>
 
-            <button type="submit" disabled={loading} className="btn btn-secondary w-full mt-4">
+            <button type="submit" disabled={loading} className="btn btn-secondary btn-outline rounded-bl-2xl rounded-tr-2xl text-black hover:text-white w-full mt-4">
               {loading ? "Adding..." : "Add Scholarship"}
             </button>
           </fieldset>

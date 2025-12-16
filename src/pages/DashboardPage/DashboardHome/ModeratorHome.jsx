@@ -20,6 +20,7 @@ import {
 
 // Animation
 import { motion } from "framer-motion";
+import LoadingData from "../../../components/Loading/LoadingData";
 
 const ModeratorHome = () => {
   const axiosSecure = useAxiosSecure();
@@ -47,7 +48,7 @@ const ModeratorHome = () => {
   });
 
   if (appLoading || reviewLoading) {
-    return <LoadingScreen />;
+    return <LoadingData />;
   }
 
   /* =========================

@@ -10,6 +10,7 @@ import useAuth from "../../hooks/useAuth";
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
 import { MdReviews } from "react-icons/md";
+import LoadingData from "../../components/Loading/LoadingData";
 
 const MyApplications = () => {
     const axiosSecure = useAxiosSecure();
@@ -158,6 +159,9 @@ const MyApplications = () => {
             }
         }
     };
+
+  
+
 
     return (
         <div className="w-full p-6 bg-white shadow-lg border border-secondary/50 rounded-tr-2xl rounded-bl-2xl">

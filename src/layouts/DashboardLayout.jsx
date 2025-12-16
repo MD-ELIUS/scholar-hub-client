@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { Link, NavLink, Outlet } from 'react-router';
-import { LayoutDashboard, Users, UserCheck, BookOpen, BarChart2 } from 'lucide-react';
+import { LayoutDashboard, Users, UserCheck, BookOpen, BarChart2, FileUser, UserStar, Star } from 'lucide-react';
 import { FiLogOut, FiChevronLeft, FiChevronRight, FiX, FiHome } from 'react-icons/fi';
 import avatarImg from '../assets/avatar.png';
 import useAuth from '../hooks/useAuth';
 import LoadingScreen from '../components/Loading/LoadingScreen';
 import logo from "../assets/logo.png"
 import useRole from '../hooks/useRole';
+import { GrFormAdd } from 'react-icons/gr';
+import { VscDiffAdded } from 'react-icons/vsc';
+import { BsDatabaseFillGear } from 'react-icons/bs';
+import { SiGoogletagmanager } from 'react-icons/si';
+import LoadingDashboard from '../components/Loading/LoadingDashboard';
 
 const DashboardLayout = () => {
   const { user, logOut, loading } = useAuth();
@@ -29,8 +34,8 @@ const DashboardLayout = () => {
 
         { label: 'My Dashboard', to: '/dashboard', icon: <LayoutDashboard size={18} /> },
         { label: 'My Profile', to: '/dashboard/profile', icon: <UserCheck size={18} /> },
-        { label: 'Add Scholarship', to: '/dashboard/add-scholarship', icon: <BookOpen size={18} /> },
-        { label: 'Manage Scholarships', to: '/dashboard/manage-scholarships', icon: <BookOpen size={18} /> },
+        { label: 'Add Scholarship', to: '/dashboard/add-scholarship', icon: <VscDiffAdded size={18} /> },
+        { label: 'Manage Scholarships', to: '/dashboard/manage-scholarships', icon: <BsDatabaseFillGear size={18} /> },
         { label: 'Manage Users', to: '/dashboard/manage-users', icon: <Users size={18} /> },
         { label: 'Analytics', to: '/dashboard/analytics', icon: <BarChart2 size={18} /> }
       ];
@@ -38,15 +43,15 @@ const DashboardLayout = () => {
       return [
         { label: 'My Dashboard', to: '/dashboard', icon: <LayoutDashboard size={18} /> },
         { label: 'My Profile', to: '/dashboard/profile', icon: <UserCheck size={18} /> },
-        { label: 'Manage Applications', to: '/dashboard/manage-applications', icon: <BookOpen size={18} /> },
-        { label: 'All Reviews', to: '/dashboard/all-reviews', icon: <BookOpen size={18} /> },
+        { label: 'Manage Applications', to: '/dashboard/manage-applications', icon: <SiGoogletagmanager size={18} /> },
+        { label: 'All Reviews', to: '/dashboard/all-reviews', icon:    <Star size={18} /> },
       ];
     } else if (role === 'student') {
       return [
         { label: 'My Dashboard', to: '/dashboard', icon: <LayoutDashboard size={18} /> },
         { label: 'My Profile', to: '/dashboard/profile', icon: <UserCheck size={18} /> },
-        { label: 'My Applications', to: '/dashboard/my-applications', icon: <BookOpen size={18} /> },
-        { label: 'My Reviews', to: '/dashboard/my-reviews', icon: <BookOpen size={18} /> },
+        { label: 'My Applications', to: '/dashboard/my-applications', icon:  <FileUser size={18}  /> },
+        { label: 'My Reviews', to: '/dashboard/my-reviews', icon:  <UserStar size={18} /> },
       ];
     }
 
@@ -59,7 +64,7 @@ const DashboardLayout = () => {
 
 
   if (loading || roleLoading) {
-    return <LoadingScreen></LoadingScreen>
+    return <LoadingDashboard></LoadingDashboard>
   }
 
   return (

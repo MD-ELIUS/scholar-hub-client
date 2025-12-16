@@ -21,6 +21,7 @@ import {
 
 // ✅ Animation
 import { motion } from "framer-motion";
+import LoadingData from "../../../components/Loading/LoadingData";
 
 const StudentHome = () => {
   const { user, loading } = useAuth();
@@ -55,7 +56,7 @@ const StudentHome = () => {
   });
 
   if (loading || applicationsLoading || reviewsLoading) {
-    return <LoadingScreen />;
+    return <LoadingData />;
   }
 
   const totalApplications = applications.length;
@@ -128,9 +129,9 @@ const totalSpent = paidApplications.reduce(
         {[
           { title: "My Applications", value: totalApplications },
           { title: "My Reviews", value: totalReviews },
-          { title: "Total Money Spent", value: `$${totalSpent.toFixed(2)}` },
+          { title: "Total Fees", value: `$${totalSpent.toFixed(2)}` },
           {
-            title: "Average Spent",
+            title: "Average Fee",
             value: `$${totalApplications ? (totalSpent / totalApplications).toFixed(2) : "0.00"}`,
           },
         ].map((item, i) => (

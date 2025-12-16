@@ -8,6 +8,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import useAuth from '../../hooks/useAuth';
 import useRole from '../../hooks/useRole';
+import LoadingData from '../../components/Loading/LoadingData';
 
 const ManageUsers = () => {
 
@@ -19,7 +20,7 @@ const ManageUsers = () => {
   const [filterRole, setFilterRole] = useState('');
 
   // ==== GET USERS ====
-  const { refetch, data: users = [] } = useQuery({
+  const { refetch, data: users = [] , isLoading } = useQuery({
     queryKey: ['users', searchText, filterRole],
     queryFn: async () => {
       const res = await axiosSecure.get(
@@ -88,6 +89,8 @@ const ManageUsers = () => {
     return "No users found.";
   };
 
+  
+
   return (
     <div>
       <h2 className="text-3xl text-primary font-semibold mb-6">
@@ -95,7 +98,7 @@ const ManageUsers = () => {
       </h2>
 
       {/* SEARCH + FILTER */}
-      <div className="flex gap-4 mb-6">
+      <div className="flex flex-col md:flex-row gap-4 mb-6">
         <input
           type="text"
           placeholder="Search by name/email"
@@ -130,7 +133,16 @@ const ManageUsers = () => {
           </thead>
 
           <tbody>
-            {users.length === 0 && (
+
+            {isLoading && (
+              <tr>
+                <td colSpan="8" className="text-center py-10 text-primary">
+                  Loading...
+                </td>
+              </tr>
+            )}
+
+            {!isLoading && users.length === 0 && (
               <tr>
                 <td colSpan="6" className="text-center py-10 text-xl font-semibold text-primary opacity-70">
                   {getEmptyMessage()}
@@ -167,7 +179,7 @@ const ManageUsers = () => {
 
                     {user.role !== "admin" && (
                       <button
-                        className="text-primary tooltip"
+                        className="text-primary tooltip tooltip-primary"
                         data-tip="Make Admin"
                         onClick={() => handleChangeRole(user, "admin")}
                       >
@@ -187,7 +199,7 @@ const ManageUsers = () => {
 
                     {user.role !== "moderator" && (
                       <button
-                        className="text-secondary tooltip"
+                        className="text-secondary tooltip tooltip-secondary"
                         data-tip="Make Moderator"
                         onClick={() => handleChangeRole(user, "moderator")}
                       >
@@ -196,7 +208,7 @@ const ManageUsers = () => {
                     )}
 
                     <button
-                      className="text-red-500 tooltip"
+                      className="text-red-500 tooltip tooltip-error"
                       data-tip="Delete User"
                       onClick={() => handleDeleteUser(user)}
                     >

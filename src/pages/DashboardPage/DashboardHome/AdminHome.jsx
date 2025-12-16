@@ -15,6 +15,7 @@ import {
 
 // Animation
 import { motion } from "framer-motion";
+import LoadingData from "../../../components/Loading/LoadingData";
 
 const AdminHome = () => {
   const axiosSecure = useAxiosSecure();
@@ -45,7 +46,7 @@ const AdminHome = () => {
   });
 
   if (userLoading || scholarshipLoading || appLoading) {
-    return <LoadingScreen />;
+    return <LoadingData />;
   }
 
   /* ================= CALCULATIONS ================= */
