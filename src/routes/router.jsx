@@ -22,6 +22,7 @@ import ManageApplications from "../pages/Moderator/ManageApplications";
 import AllReviews from "../pages/Moderator/AllReviews";
 import StudentRoute from "./StudentRoute";
 import ModeratorRoute from "./ModeratorRoute";
+import AdminAnalytics from "../pages/Admin/AdminAnalytics";
 
 export const router = createBrowserRouter([
   {
@@ -73,6 +74,10 @@ export const router = createBrowserRouter([
       {
         path: 'manage-users',
         element: <AdminRoute><ManageUsers></ManageUsers></AdminRoute>
+      },
+      {
+        path: 'analytics',
+        element: <AdminRoute><AdminAnalytics></AdminAnalytics></AdminRoute>
       },
       {
         path: 'manage-applications',

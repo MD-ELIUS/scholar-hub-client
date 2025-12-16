@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import LoadingScreen from "../../../components/Loading/LoadingScreen";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 // Recharts
 import {
@@ -11,13 +11,18 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
 } from "recharts";
 
 // Animation
 import { motion } from "framer-motion";
 
 const ModeratorHome = () => {
-  const token = localStorage.getItem("token");
+  const axiosSecure = useAxiosSecure();
 
   /* =========================
      FETCH APPLICATIONS (MODERATOR)
@@ -25,17 +30,9 @@ const ModeratorHome = () => {
   const { data: applications = [], isLoading: appLoading } = useQuery({
     queryKey: ["allApplications"],
     queryFn: async () => {
-      const res = await axios.get(
-        "http://localhost:3000/applications/all",
-        {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axiosSecure.get("/applications/all");
       return res.data;
     },
-    enabled: !!token,
   });
 
   /* =========================
@@ -44,17 +41,9 @@ const ModeratorHome = () => {
   const { data: reviews = [], isLoading: reviewLoading } = useQuery({
     queryKey: ["allReviews"],
     queryFn: async () => {
-      const res = await axios.get(
-        "http://localhost:3000/reviews/all",
-        {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axiosSecure.get("/reviews/all");
       return res.data;
     },
-    enabled: !!token,
   });
 
   if (appLoading || reviewLoading) {
@@ -83,7 +72,7 @@ const ModeratorHome = () => {
     (a) => a.applicationStatus === "rejected"
   ).length;
 
-  // Feedback Due = completed applications without review
+  // Feedback Due
   const feedbackDue = applications.filter((app) => {
     if (app.applicationStatus !== "completed") return false;
     return !reviews.some(
@@ -107,6 +96,21 @@ const ModeratorHome = () => {
   ];
 
   const pieColors = ["#F4B400", "#16756D", "#4CAF50", "#F44336"];
+
+  /* =========================
+     LATEST APPLICATIONS (BAR)
+  ========================= */
+  const latestBarData = [...applications]
+    .sort(
+      (a, b) =>
+        new Date(b.applicationDate) - new Date(a.applicationDate)
+    )
+    .slice(0, 4)
+    .map((app) => ({
+      name: app.scholarshipName || "Scholarship",
+      fees: Number(app.applicationFees || 0),
+      serviceCharge: Number(app.serviceCharge || 0),
+    }));
 
   const cardStyle =
     "bg-white shadow-md rounded-bl-2xl rounded-tr-2xl border border-secondary/50 p-6 text-center";
@@ -153,35 +157,67 @@ const ModeratorHome = () => {
         ))}
       </motion.div>
 
-      {/* ================= PIE CHART ================= */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.97 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.45 }}
-        className="bg-white shadow-md rounded-bl-2xl rounded-tr-2xl border border-secondary/50 p-6 col-span-1 lg:col-span-2"
-      >
-        <h2 className="text-lg text-primary font-semibold mb-4 text-center">
-          Application Status Overview
-        </h2>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 col-span-1 lg:col-span-2">
+        {/* ================= PIE CHART ================= */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.97 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.45 }}
+          className="bg-white shadow-md rounded-bl-2xl rounded-tr-2xl border border-secondary/50 p-6"
+        >
+          <h2 className="text-lg text-primary font-semibold mb-4 text-center">
+            Application Status Overview
+          </h2>
 
-        <ResponsiveContainer width="100%" height={300}>
-          <PieChart>
-            <Pie
-              data={pieData}
-              dataKey="value"
-              nameKey="name"
-              outerRadius={100}
-              label
-            >
-              {pieData.map((entry, index) => (
-                <Cell key={index} fill={pieColors[index]} />
-              ))}
-            </Pie>
-            <Tooltip />
-            <Legend />
-          </PieChart>
-        </ResponsiveContainer>
-      </motion.div>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={pieData}
+                dataKey="value"
+                nameKey="name"
+                outerRadius={100}
+                label
+              >
+                {pieData.map((entry, index) => (
+                  <Cell key={index} fill={pieColors[index]} />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        </motion.div>
+
+        {/* ================= LATEST APPLICATIONS BAR ================= */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45 }}
+          className="bg-white shadow-md rounded-bl-2xl rounded-tr-2xl border border-secondary/50 p-6"
+        >
+          <h2 className="text-lg text-primary font-semibold mb-4 text-center">
+            Latest Applications
+          </h2>
+
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={latestBarData} layout="vertical">
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis type="number" />
+              <YAxis
+                dataKey="name"
+                type="category"
+                width={100}
+                interval={0}
+                tick={{ fontSize: 12 }}
+              />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="fees" fill="#16756D" barSize={18} />
+              <Bar dataKey="serviceCharge" fill="#F4B400" barSize={18} />
+            </BarChart>
+          </ResponsiveContainer>
+        </motion.div>
+      </div>
     </motion.div>
   );
 };

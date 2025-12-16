@@ -29,7 +29,7 @@ const ScholarshipCard = ({ scholarship }) => {
   const isApplied = !!appliedApplication;
 
   return (
-    <div className="relative bg-white shadow-lg rounded-2xl overflow-hidden border border-secondary/30 hover:shadow-xl transition duration-300 h-full flex flex-col">
+    <div className="relative bg-white shadow-lg rounded-bl-2xl rounded-tr-2xl overflow-hidden border border-secondary/30 hover:shadow-xl transition duration-300 h-full flex flex-col">
       
       {/* Labels */}
       <div className="absolute top-3 left-3 flex flex-col gap-1 z-10">

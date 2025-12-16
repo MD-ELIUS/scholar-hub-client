@@ -110,8 +110,8 @@ const AddScholarship = () => {
     "file-input outline-none w-full border-primary rounded-bl-2xl rounded-tr-2xl";
 
   return (
-    <div className="w-11/12 mx-auto py-10 flex justify-center">
-      <div className="p-6 bg-white shadow-lg border border-secondary/50 rounded-tr-2xl rounded-bl-2xl w-full max-w-4xl">
+    <div className=" flex justify-center">
+      <div className="p-6 bg-white shadow-lg border border-secondary/50 rounded-tr-2xl rounded-bl-2xl w-full ">
 
         <h2 className="text-3xl font-bold mb-6 text-center text-primary">
           Add New Scholarship

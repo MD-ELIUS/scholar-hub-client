@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import LoadingScreen from "../../../components/Loading/LoadingScreen";
 
 // Recharts imports
@@ -24,6 +24,7 @@ import { motion } from "framer-motion";
 
 const StudentHome = () => {
   const { user, loading } = useAuth();
+  const axiosSecure = useAxiosSecure();
 
   const {
     data: applications = [],
@@ -32,8 +33,8 @@ const StudentHome = () => {
     queryKey: ["applications", user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
-      const res = await axios.get(
-        `http://localhost:3000/applications?userEmail=${user.email}`
+      const res = await axiosSecure.get(
+        `/applications?userEmail=${user.email}`
       );
       return res.data;
     },
@@ -46,8 +47,8 @@ const StudentHome = () => {
     queryKey: ["reviews", user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
-      const res = await axios.get(
-        `http://localhost:3000/reviews?userEmail=${user.email}`
+      const res = await axiosSecure.get(
+        `/reviews?userEmail=${user.email}`
       );
       return res.data;
     },
@@ -63,11 +64,19 @@ const StudentHome = () => {
   const completed = applications.filter((app) => app.applicationStatus === "completed").length;
   const rejected = applications.filter((app) => app.applicationStatus === "rejected").length;
   const totalReviews = reviews.length;
+  
+const paidApplications = applications.filter(
+  (app) => app.paymentStatus === "paid"
+);
 
-  const totalSpent = applications.reduce(
-    (sum, app) => sum + (Number(app.applicationFees || 0) + Number(app.serviceCharge || 0)),
-    0
-  );
+const totalSpent = paidApplications.reduce(
+  (sum, app) =>
+    sum +
+    (Number(app.applicationFees || 0) +
+      Number(app.serviceCharge || 0)),
+  0
+);
+
 
   const pieData = [
     { name: "Pending", value: pending },
@@ -75,6 +84,7 @@ const StudentHome = () => {
     { name: "Completed", value: completed },
     { name: "Rejected", value: rejected },
   ];
+
   const pieColors = ["#F4B400", "#16756D", "#4CAF50", "#F44336"];
 
   const barData = applications.reduce((acc, app) => {
@@ -115,7 +125,7 @@ const StudentHome = () => {
         }}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 col-span-1 lg:col-span-2"
       >
-        {[ 
+        {[
           { title: "My Applications", value: totalApplications },
           { title: "My Reviews", value: totalReviews },
           { title: "Total Money Spent", value: `$${totalSpent.toFixed(2)}` },
@@ -133,8 +143,12 @@ const StudentHome = () => {
             transition={{ duration: 0.4 }}
             className={cardStyle}
           >
-            <h2 className="text-lg text-primary font-semibold mb-2">{item.title}</h2>
-            <p className="text-3xl text-secondary font-bold">{item.value}</p>
+            <h2 className="text-lg text-primary font-semibold mb-2">
+              {item.title}
+            </h2>
+            <p className="text-3xl text-secondary font-bold">
+              {item.value}
+            </p>
           </motion.div>
         ))}
       </motion.div>
@@ -152,7 +166,13 @@ const StudentHome = () => {
           </h2>
           <ResponsiveContainer width="100%" height={250}>
             <PieChart>
-              <Pie data={pieData} dataKey="value" nameKey="name" outerRadius={80} label>
+              <Pie
+                data={pieData}
+                dataKey="value"
+                nameKey="name"
+                outerRadius={80}
+                label
+              >
                 {pieData.map((entry, index) => (
                   <Cell key={index} fill={pieColors[index]} />
                 ))}
