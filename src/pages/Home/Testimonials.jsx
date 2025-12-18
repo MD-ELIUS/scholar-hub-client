@@ -11,27 +11,27 @@ import { GiFairyWings } from "react-icons/gi";
 
 const testimonials = [
     {
-        name: "John Doe",
+        name: "Rakibul karim",
         role: "MSc Computer Science",
-        image: "https://randomuser.me/api/portraits/men/32.jpg",
+        image: "https://i.ibb.co/TD2NW6t5/close-up-portrait-curly-handsome-european-male-176532-8133.avif",
         message: "ScholarHub helped me find the perfect scholarship for my studies. The filtering system is intuitive and the application tracking kept me organized throughout."
     },
     {
-        name: "Jane Smith",
+        name: "Talha Siddique",
         role: "MBA at Harvard",
-        image: "https://randomuser.me/api/portraits/women/44.jpg",
+        image: "https://i.ibb.co/LXDzzGJ3/portrait-young-woman-against-pink-background-1048944-23206172.avif",
         message: "I secured full funding through this platform's amazing resources. The essay guidance and interview tips were essential for my successful Ivy League application."
     },
     {
-        name: "Ali Rahman",
+        name: "Mehedi Hasan",
         role: "PhD Physics",
-        image: "https://randomuser.me/api/portraits/men/86.jpg",
+        image: "https://i.ibb.co/PGNB30c6/headshot-funny-postive-hipster-guy-smiles-happily-has-sincere-optimistic-gaze-wears-round-transparen.avif",
         message: "Applying to international programs became simple and stress-free. I never thought I could manage so many applications, but this tool made it all possible for me."
     },
     {
-        name: "Sarah Jones",
+        name: "Faruq Rashid",
         role: "MA History",
-        image: "https://randomuser.me/api/portraits/women/68.jpg",
+        image: "https://i.ibb.co/MxyMJLPM/photo-1535713875002-d1d0cf377fde.jpg",
         message: "A fantastic resource for discovering new opportunities! I found several scholarships I didn't know existed. The user interface is clean and very easy to navigate."
     }
 ];

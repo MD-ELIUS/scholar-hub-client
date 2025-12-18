@@ -29,13 +29,15 @@ const AdminHome = () => {
     },
   });
 
-  const { data: scholarships = [], isLoading: scholarshipLoading } = useQuery({
+  // FIXED scholarships to always be array
+  const { data: scholarshipsData = {}, isLoading: scholarshipLoading } = useQuery({
     queryKey: ["scholarships"],
     queryFn: async () => {
       const res = await axiosSecure.get("/scholarships");
       return res.data;
     },
   });
+  const scholarships = scholarshipsData.scholarships || [];
 
   const { data: applications = [], isLoading: appLoading } = useQuery({
     queryKey: ["applications"],
@@ -122,16 +124,13 @@ const AdminHome = () => {
             <h2 className="text-lg text-primary font-semibold mb-2">
               {item.title}
             </h2>
-            <p className="text-3xl text-secondary font-bold">
-              {item.value}
-            </p>
+            <p className="text-3xl text-secondary font-bold">{item.value}</p>
           </motion.div>
         ))}
       </motion.div>
 
       {/* ================= CHARTS ================= */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 col-span-1 lg:col-span-2">
-        
         {/* Subject Category */}
         <motion.div
           initial={{ opacity: 0, scale: 0.97 }}
@@ -191,7 +190,6 @@ const AdminHome = () => {
             </PieChart>
           </ResponsiveContainer>
         </motion.div>
-
       </div>
     </motion.div>
   );

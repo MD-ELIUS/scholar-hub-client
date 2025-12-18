@@ -15,26 +15,29 @@ const ManageScholarships = () => {
   const [searchText, setSearchText] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
   const [filterSubject, setFilterSubject] = useState("");
-  const [filterCountry, setFilterCountry] = useState("");
+  
 
   // NEW STATE FOR EDIT MODAL
   const [editingScholarship, setEditingScholarship] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Fetch scholarships with search & filters
-  const { data: scholarships = [], isLoading } = useQuery({
-    queryKey: ["scholarships", searchText, filterCategory, filterSubject, filterCountry],
-    queryFn: async () => {
-      const params = new URLSearchParams({
-        search: searchText,
-        scholarshipCategory: filterCategory,
-        subjectCategory: filterSubject,
-        country: filterCountry,
-      }).toString();
-      const res = await axiosSecure.get(`/scholarships?${params}`);
-      return res.data;
-    },
-  });
+const { data = {}, isLoading } = useQuery({
+  queryKey: ["scholarships", searchText, filterCategory, filterSubject],
+  queryFn: async () => {
+    const params = new URLSearchParams({
+      search: searchText,
+      scholarshipCategory: filterCategory,
+      subjectCategory: filterSubject,
+    }).toString();
+
+    const res = await axiosSecure.get(`/scholarships?${params}`);
+    return res.data;
+  },
+});
+
+const { scholarships = [] } = data;
+
 
   const handleDelete = async (id, scholarshipName) => {
     const confirm = await Swal.fire({
@@ -84,7 +87,7 @@ const ManageScholarships = () => {
       <div className="flex flex-wrap gap-4 mb-6">
         <input
           type="text"
-          placeholder="Search by Scholarship, University, or Degree"
+          placeholder="Search by Scholarship, University, Degree or country"
           className="input w-full max-w-xs outline-none border-secondary/50 rounded-bl-2xl rounded-tr-2xl"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
@@ -115,13 +118,7 @@ const ManageScholarships = () => {
           <option value="Science">Science</option>
         </select>
 
-        <input
-          type="text"
-          placeholder="Filter by Country"
-          className="input w-full max-w-xs outline-none border-secondary/50 rounded-bl-2xl rounded-tr-2xl"
-          value={filterCountry}
-          onChange={(e) => setFilterCountry(e.target.value)}
-        />
+        
       </div>
 
       {/* TABLE */}
