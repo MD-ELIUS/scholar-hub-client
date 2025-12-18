@@ -30,7 +30,7 @@ const Faq = () => {
   const [open, setOpen] = useState(null);
 
   return (
-    <section className="w-11/12 mx-auto my-14 ">
+    <section className="w-11/12 mx-auto mt-14 scroll-mt-24 ">
       {/* Title */}
       <motion.h2
         initial={{ opacity: 0, y: 15 }}

@@ -72,7 +72,7 @@ const Testimonials = () => {
                             <SwiperSlide key={idx} className="flex">
                                 <motion.div
                                     className="bg-white p-8 rounded-bl-2xl rounded-tr-2xl shadow-lg border border-secondary/70
-                                    h-full flex flex-col relative group hover:shadow-xl transition-shadow duration-300 "
+                                     flex flex-col relative group hover:shadow-xl transition-shadow duration-300 h-[260px]"
                                 >
                                     <FaQuoteLeft className="text-primary/10 text-6xl absolute top-6 right-4 md:right-6" />
 

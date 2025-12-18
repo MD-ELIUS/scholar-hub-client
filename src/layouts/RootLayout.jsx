@@ -4,6 +4,7 @@ import Navbar from '../components/shared/Navbar/Navbar';
 import Footer from '../components/shared/Footer/Footer';
 import useAuth from '../hooks/useAuth'; 
 import LoadingScreen from '../components/Loading/LoadingScreen';
+import ScrollToTop from '../components/shared/ScrollToTop';
 
 const RootLayout = () => {
     const { loading } = useAuth(); 
@@ -32,6 +33,7 @@ const RootLayout = () => {
     return (
         <div className='bg-[#F4FAF9] max-w-[1600px] mx-auto '>
             <div className=''>
+                <ScrollToTop></ScrollToTop>
                 <section
                   className={`sticky top-0  z-50 bg-[#F4FAF9] transition-shadow duration-300 ${shadow ? 'shadow-lg' : ''}`}
                 >

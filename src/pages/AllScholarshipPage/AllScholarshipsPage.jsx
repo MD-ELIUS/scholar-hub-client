@@ -27,7 +27,7 @@ const AllScholarshipsPage = () => {
   });
 
   return (
-    <div className="w-11/12 mx-auto  py-10">
+    <div className="w-11/12 mx-auto  pt-10">
       <h2 className="text-2xl sm:text-3xl md:text-4xl text-primary font-bold mb-8 text-center">
         All Scholarships ({scholarships.length})
       </h2>
