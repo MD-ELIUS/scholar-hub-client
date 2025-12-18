@@ -1,22 +1,27 @@
 import React from "react";
 import { useParams, Link } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-import { 
-  FaUniversity, 
-  FaMapMarkerAlt, 
-  FaGraduationCap, 
-  FaClock, 
-  FaDollarSign, 
-  FaAward
+import {
+  FaUniversity,
+  FaMapMarkerAlt,
+  FaGraduationCap,
+  FaClock,
+  FaDollarSign,
+  FaAward,
+  FaArrowRight,
+  FaCheckCircle,
+  FaStar,
+  FaQuoteLeft
 } from "react-icons/fa";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
-
+import useRole from "../../hooks/useRole";
 
 const ScholarshipDetailsPage = () => {
   const { id } = useParams();
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
+  const { role } = useRole();
 
   // Fetch scholarship details
   const { data: scholarship, isLoading } = useQuery({
@@ -37,129 +42,307 @@ const ScholarshipDetailsPage = () => {
     },
   });
 
-  if (isLoading || appLoading) return <p className="text-center mt-10">Loading...</p>;
-  if (!scholarship) return <p className="text-center mt-10 text-red-500">Scholarship not found.</p>;
+  // Fetch Reviews
+  const { data: reviews, isLoading: reviewsLoading } = useQuery({
+    queryKey: ["reviews", scholarship?.scholarshipName],
+    enabled: !!scholarship?.scholarshipName,
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/reviews/all?search=${scholarship.scholarshipName}`);
+      return res.data;
+    },
+  });
+
+  const scrollToApply = () => {
+    const applySection = document.getElementById("apply-card");
+    if (applySection) {
+      applySection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  if (isLoading || appLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-[60vh]">
+        <span className="loading loading-spinner loading-lg text-primary"></span>
+      </div>
+    );
+  }
+
+  if (!scholarship) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+        <h2 className="text-2xl font-bold text-gray-400">Scholarship Not Found</h2>
+        <Link to="/" className="btn btn-primary">Go Home</Link>
+      </div>
+    );
+  }
+
+  const {
+    universityName,
+    scholarshipName,
+    scholarshipCategory,
+    degree,
+    subjectCategory,
+    deadline,
+    image,
+    description,
+    worldRank,
+    country,
+    city,
+    totalAmount,
+    applicationFees,
+    serviceCharge,
+    stipend,
+  } = scholarship;
+
+  // Format date
+  const formattedDeadline = new Date(deadline).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric"
+  });
 
   return (
-    <div className="w-11/12 mx-auto py-12 space-y-10">
+    <div className="bg-gray-50 min-h-screen pb-20">
 
       {/* Hero Section */}
-      <div className="relative w-full rounded-bl-2xl rounded-tr-2xl overflow-hidden shadow-lg border border-secondary/20">
+      <div className="relative w-full h-[400px] md:h-[500px]">
+        <div className="absolute inset-0 bg-black/50 z-10"></div>
         <img
-          src={scholarship.image || "/placeholder.png"}
-          alt={scholarship.universityName}
-          className="w-full h-72 md:h-96 object-cover filter brightness-75"
+          src={image || "/placeholder.png"}
+          alt={universityName}
+          className="w-full h-full object-cover"
         />
 
-        {/* Deadline */}
-        <div className="absolute top-4 right-4 flex flex-col items-start gap-1 z-20">
-          <div className="bg-red-600 text-white font-bold px-3 py-1 rounded-bl-2xl rounded-tr-2xl flex items-center gap-2 shadow-lg text-sm md:text-base lg:text-lg">
-            <FaClock />
-            <span>Deadline: {new Date(scholarship.deadline).toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" })}</span>
+        <div className="absolute inset-0 z-20 container mx-auto px-4 flex flex-col justify-end pb-12">
+          {/* Breadcrumbs / Badges */}
+          <div className="flex flex-wrap gap-2 mb-4 animate-fade-in-up">
+            <span className="badge badge-primary badge-lg border-none text-white py-2 px-2 md:py-4 md:px-4 font-semibold shadow-lg rounded-bl-2xl rounded-tr-2xl text-xs sm:text-sm md:text-base">
+              {scholarshipCategory}
+            </span>
+            <span className="badge badge-secondary badge-lg border-none text-white py-2 px-2 md:py-4 md:px-4 font-semibold shadow-lg rounded-bl-2xl rounded-tr-2xl text-xs sm:text-sm md:text-base">
+              {degree}
+            </span>
+            <span className="badge bg-accent text-white border-none badge-lg py-2 px-2 md:py-4 md:px-4 font-semibold shadow-lg rounded-bl-2xl rounded-tr-2xl text-xs sm:text-sm md:text-base">
+              {subjectCategory}
+            </span>
           </div>
-        </div>
 
-        {/* Labels and Scholarship Name */}
-        <div className="absolute inset-0 flex flex-col justify-end p-6 bg-gradient-to-t from-black/40 to-transparent">
-          <h1 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mt-4 break-words">
-            {scholarship.scholarshipName}
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2 leading-tight drop-shadow-lg max-w-4xl">
+            {scholarshipName}
           </h1>
-          <div className="flex flex-wrap gap-2 mt-2">
-            <span className="bg-primary text-white text-xs sm:text-sm font-semibold px-3 py-1 rounded-bl-2xl rounded-tr-2xl">
-              {scholarship.scholarshipCategory}
-            </span>
-            <span className="bg-secondary text-white text-xs sm:text-sm font-semibold px-3 py-1 rounded-bl-2xl rounded-tr-2xl">
-              {scholarship.degree}
-            </span>
-            <span className="bg-accent text-white text-xs sm:text-sm font-semibold px-3 py-1 rounded-bl-2xl rounded-tr-2xl">
-              {scholarship.subjectCategory}
-            </span>
+
+          <div className="flex flex-col md:flex-row md:items-center text-gray-200 gap-2 text-sm sm:text-base md:text-lg font-medium">
+           <div className="flex items-center gap-1">
+             <FaUniversity className="text-secondary" />
+            <span>{universityName}</span>
+           </div>
+            <span className="hidden md:flex mx-2">•</span>
+           <div className="flex items-center gap-1">
+             <FaMapMarkerAlt className="text-secondary" />
+            <span>{country}, {city}</span>
+           </div>
           </div>
         </div>
       </div>
 
-      {/* Description */}
-      {scholarship.description && (
-        <div className="p-6 rounded-bl-2xl rounded-tr-2xl border border-secondary/20">
-          <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-primary mb-4 flex items-center gap-2">
-            <FaGraduationCap /> Scholarship Description
-          </h2>
-          <p className="text-gray-700 text-xs sm:text-sm md:text-base lg:text-base leading-relaxed">
-            {scholarship.description}
-          </p>
+      {/* Main Content Grid */}
+      <div className="container mx-auto px-4 -mt-10 relative z-30">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+          {/* Left Column: Details (2 spans) */}
+          <div className="lg:col-span-2 space-y-8 text-black">
+
+            {/* Description Card */}
+            <div className="bg-white rounded-bl-2xl rounded-tr-2xl shadow-xl p-6 sm:p-8 border border-t-4 border-secondary/70 animate-fade-in">
+              <h2 className="text-xl sm:text-2xl font-bold text-primary mb-6 flex items-center gap-2">
+                <FaGraduationCap className="text-2xl sm:text-3xl" />
+                About this Scholarship
+              </h2>
+              <p className="text-gray-600 leading-relaxed text-base sm:text-lg whitespace-pre-line">
+                {description}
+              </p>
+            </div>
+
+            {/* Stipend / Benefits Info */}
+            {stipend && (
+              <div className="bg-white rounded-bl-2xl rounded-tr-2xl shadow-xl p-6 sm:p-8 border-l-4 border-secondary">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                  <FaDollarSign className="text-secondary text-xl sm:text-2xl" />
+                  Stipend & Benefits
+                </h3>
+                <p className="text-gray-600 leading-relaxed text-base sm:text-lg">
+                  {stipend}
+                </p>
+              </div>
+            )}
+
+            {/* Additional Details Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-white p-6 border border-secondary/70 rounded-bl-2xl rounded-tr-2xl shadow-md flex items-center gap-4">
+                <div className="p-3 bg-primary/10 rounded-full text-primary">
+                  <FaAward size={24} />
+                </div>
+                <div>
+                  <p className="text-xs sm:text-sm text-gray-500 font-semibold uppercase">World Rank</p>
+                  <p className="text-lg sm:text-xl font-bold text-gray-800">#{worldRank || "N/A"}</p>
+                </div>
+              </div>
+
+              <div className="bg-white border border-secondary/70 p-6 rounded-bl-2xl rounded-tr-2xl shadow-md flex items-center gap-4">
+                <div className="p-3 bg-secondary/10 rounded-full text-secondary">
+                  <FaClock size={24} />
+                </div>
+                <div>
+                  <p className="text-xs sm:text-sm text-gray-500 font-semibold uppercase">Deadline</p>
+                  <p className="text-lg sm:text-xl font-bold text-gray-800">{formattedDeadline}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Reviews Section */}
+            <div className="pt-8">
+              <h3 className="text-xl md:text-2xl font-bold text-primary mb-6 flex items-center gap-2">
+                <FaQuoteLeft /> Student Reviews
+              </h3>
+
+              {reviewsLoading ? (
+                <div className="flex justify-center p-10">
+                  <span className="loading loading-dots loading-lg text-primary"></span>
+                </div>
+              ) : reviews && reviews.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {reviews.map((review) => (
+                    <div key={review._id} className="bg-white p-6 rounded-bl-2xl rounded-tr-2xl shadow-lg border border-secondary/70 flex flex-col h-full hover:shadow-xl transition-shadow duration-300">
+
+                      {/* Review Header */}
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="avatar">
+                          <div className="md:w-12 md:h-12 w-10 h-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                            <img src={review.userImage || "https://i.ibb.co/qYWJvVyQ/Bright-Colorful-Young-Man-Avatar.png"} alt={review.userName} onError={(e) => e.target.src = "https://i.ibb.co/qYWJvVyQ/Bright-Colorful-Young-Man-Avatar.png"} />
+                          </div>
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-gray-800 text-sm md:text-base">{review.userName}</h4>
+                          <p className="text-xs text-gray-500">{new Date(review.reviewDate).toLocaleDateString()}</p>
+                        </div>
+                      </div>
+
+                      {/* Rating */}
+                      <div className="flex items-center gap-1 text-secondary mb-3">
+                        {[...Array(5)].map((_, i) => (
+                          <FaStar key={i} className={i < review.ratingPoint ? "text-secondary" : "text-gray-300"} />
+                        ))}
+                        <span className="text-sm text-gray-600 ml-2">({review.ratingPoint}.0)</span>
+                      </div>
+
+                      {/* Comment */}
+                      <p className="text-gray-600 text-sm flex-grow italic">
+                        "{review.reviewComment}"
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center p-10 bg-white rounded-bl-2xl rounded-tr-2xl shadow-sm border  border-secondary/70">
+                  <p className="text-gray-500 md:text-lg">No reviews yet for this scholarship.</p>
+                  <p className="text-sm text-gray-400 mt-2">Check back later or apply to be the first!</p>
+                </div>
+              )}
+            </div>
+
+          </div>
+
+          {/* Right Column: Sidebar (1 span) */}
+          <div className="space-y-6">
+
+            {/* Value / Apply Card */}
+            <div id="apply-card" className="bg-white  rounded-bl-2xl rounded-tr-2xl shadow-2xl p-6 sticky top-24 border border-secondary">
+              <div className="bg-gradient-to-r from-primary to-teal-800 rounded-bl-2xl rounded-tr-2xl p-6 text-center text-white mb-6 shadow-lg transform -translate-y-10 mx-2">
+                <p className="text-xs sm:text-sm font-medium opacity-90 uppercase tracking-wider mb-1">Scholarship Value</p>
+                <h3 className="text-3xl sm:text-4xl font-extrabold flex justify-center items-start gap-1">
+                  {/* Handle currency symbol display if needed, assumed in amount or generic $ */}
+                  <span className="text-xl sm:text-2xl mt-1">$</span>
+                  {totalAmount}
+                </h3>
+              </div>
+
+              <div className="-mt-4 space-y-4">
+                <div className="flex justify-between items-center py-3 border-b border-secondary">
+                  <span className="text-sm sm:text-base text-gray-600 font-medium">Application Fee</span>
+                  <span className="text-lg sm:text-xl font-bold text-primary">${applicationFees}</span>
+                </div>
+                <div className="flex justify-between items-center py-3 border-b border-secondary">
+                  <span className="text-sm sm:text-base text-gray-600 font-medium">Service Charge</span>
+                  <span className="text-lg sm:text-xl font-bold text-primary">${serviceCharge}</span>
+                </div>
+
+                <div className="pt-4">
+                  {role === 'student' && (
+                    <>
+                      {application ? (
+                        <div className="w-full">
+                          <div className="bg-green-50 text-green-700 p-4 rounded-bl-2xl rounded-tr-2xl flex items-center justify-center gap-2 mb-4 border border-green-200 text-sm sm:text-base">
+                            <FaCheckCircle /> Applied Successfully
+                          </div>
+                          <Link
+                            to='/dashboard/my-applications'
+                            className="btn btn-outline btn-primary w-full shadow-none hover:shadow-md transition-shadow rounded-bl-2xl rounded-tr-2xl"
+                          >
+                            View Application
+                          </Link>
+                        </div>
+                      ) : (
+                        <Link
+                          to={`/dashboard/payment/${scholarship._id}`}
+                          className="btn btn-secondary btn-outline w-full text-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 animate-pulse-slow rounded-bl-2xl rounded-tr-2xl"
+                        >
+                          Apply Now <FaArrowRight />
+                        </Link>
+                      )}
+
+                      <p className="text-xs text-center text-gray-400 mt-4">
+                        * Fees are non-refundable once paid.
+                      </p>
+                    </>
+                  )}
+                </div>
+
+
+              </div>
+            </div>
+
+           
+
+          </div>
+
+        </div>
+      </div>
+
+      {/* Floating Mobile Apply Button */}
+      {role === 'student' && (
+        <div className="fixed bottom-0 left-0 w-full bg-white shadow-[0_-4px_10px_rgba(0,0,0,0.1)] p-4 lg:hidden z-50 flex items-center justify-between gap-4">
+          <div className="flex flex-col">
+            <span className="text-xs text-gray-500 uppercase">Deadline</span>
+            <span className="text-sm font-bold text-primary">{formattedDeadline}</span>
+          </div>
+          {application ? (
+            <button
+              onClick={scrollToApply}
+              className="btn bg-green-600 hover:bg-green-700 text-white rounded-bl-2xl rounded-tr-2xl shadow-lg px-8 flex items-center gap-2"
+            >
+              <FaCheckCircle /> Applied
+            </button>
+          ) : (
+            <button
+              onClick={scrollToApply}
+              className="btn btn-primary rounded-bl-2xl rounded-tr-2xl shadow-lg px-8 text-white"
+            >
+              Apply Now
+            </button>
+          )}
         </div>
       )}
 
-      {/* Right Column: Info + Coverage + Fees */}
-      <div className="space-y-6">
-        {/* General Info */}
-        <div className="p-6 rounded-bl-2xl rounded-tr-2xl border border-secondary/20 space-y-3">
-          <div className="flex items-center gap-2 sm:gap-3">
-            <FaUniversity className="text-primary text-base sm:text-xl" />
-            <p className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-secondary">{scholarship.universityName}</p>
-          </div>
-          <div className="flex items-center gap-2 sm:gap-3">
-            <FaAward className="text-primary text-base sm:text-xl" />
-            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-secondary">World Rank: {scholarship.worldRank || "N/A"}</p>
-          </div>
-          <div className="flex items-center gap-2 sm:gap-3">
-            <FaMapMarkerAlt className="text-primary text-base sm:text-xl" />
-            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-secondary">{scholarship.country}, {scholarship.city || ""}</p>
-          </div>
-        </div>
-
-        {/* Scholarship Coverage */}
-        <div className="bg-accent p-6 text-center rounded-bl-2xl rounded-tr-2xl shadow-md border border-secondary/20 space-y-3">
-          <span className="text-sm sm:text-sm md:text-base text-white font-medium">Scholarship Coverage</span>
-          <span className="text-xl sm:text-2xl md:text-2xl lg:text-3xl font-bold text-white mt-1 block">
-            ${scholarship.totalAmount || 0}
-          </span>
-          <span className="text-xs sm:text-sm md:text-base text-white block mt-1">
-            Total amount student will receive if granted
-          </span>
-        </div>
-
-        {/* Application Fee + Service Charge + Apply Button */}
-        <div className="bg-white p-6 rounded-bl-2xl rounded-tr-2xl shadow-md border border-secondary/20 flex flex-col gap-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col">
-              <span className="text-xs sm:text-sm md:text-base text-secondary font-medium">Application Fees</span>
-              <span className="text-lg sm:text-xl md:text-xl font-semibold text-primary">${scholarship.applicationFees || 0}</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xs sm:text-sm md:text-base text-secondary font-medium">Service Charge</span>
-              <span className="text-lg sm:text-xl md:text-xl font-semibold text-primary">${scholarship.serviceCharge || 0}</span>
-            </div>
-          </div>
-
-          {/* Conditional Apply Button */}
-          {application ? (
-            <Link
-              to='/dashboard/my-applications'
-              className="bg-gray-500 hover:bg-gray-600 text-white px-10 py-3 rounded-tr-2xl rounded-bl-2xl font-semibold mt-4 transition duration-300 text-sm sm:text-base md:text-lg text-center"
-            >
-              Already Applied - View Application
-            </Link>
-          ) : (
-            <Link
-              to={`/dashboard/payment/${scholarship._id}`}
-              className="bg-secondary hover:bg-secondary/80 text-white px-10 py-3 rounded-tr-2xl rounded-bl-2xl font-semibold mt-4 transition duration-300 text-sm sm:text-base md:text-lg"
-            >
-              Apply for Scholarship
-            </Link>
-          )}
-        </div>
-
-        {/* Stipend / Additional Coverage */}
-        {scholarship.stipend && (
-          <div className="bg-white p-6 rounded-bl-2xl rounded-tr-2xl shadow-md border border-secondary/20">
-            <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-primary mb-4 flex items-center gap-2">
-              <FaDollarSign /> Stipend / Additional Coverage
-            </h2>
-            <p className="text-gray-700 text-xs sm:text-sm md:text-base lg:text-base leading-relaxed">{scholarship.stipend}</p>
-          </div>
-        )}
-      </div>
     </div>
   );
 };

@@ -14,7 +14,7 @@ const LoadingData = ({ height = 100 }) => {
       </div>
 
       {/* Subtitle */}
-      <p className="mt-2 text-center text-secondary/70 max-w-md">
+      <p className="-mt-6 text-center text-secondary/70 max-w-md">
         Loading Data....
       </p>
 

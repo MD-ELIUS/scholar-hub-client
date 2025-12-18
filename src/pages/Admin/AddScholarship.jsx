@@ -203,7 +203,7 @@ const AddScholarship = () => {
   >
     <option value="">Select Degree</option>
     <option value="Bachelor">Bachelor</option>
-    <option value="Master">Postgraduate</option>
+    <option value="Postgraduate">Postgraduate</option>
     <option value="PhD">PhD</option>
     <option value="Diploma">Diploma</option>
     {/* add more degrees as needed */}
@@ -240,10 +240,10 @@ const AddScholarship = () => {
     className="select w-full border-primary rounded-bl-2xl rounded-tr-2xl"
   >
     <option value="">Select Scholarship Category</option>
-    <option value="Merit-based">Fully Funded</option>
-    <option value="Need-based">Partially Funded</option>
-    <option value="Sports">Tuition Only</option>
-    <option value="Research">Living Expenses Covered</option>
+    <option value="Fully Funded">Fully Funded</option>
+    <option value="Partially Funded">Partially Funded</option>
+    <option value="Tuition Only">Tuition Only</option>
+    <option value="Living Expenses Covered">Living Expenses Covered</option>
     {/* add more categories as needed */}
   </select>
 </div>

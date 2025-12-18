@@ -7,7 +7,7 @@ const LoadingDashboard = ({
   subtitle = "Fetching data and preparing insights for you."
 }) => {
   return (
-    <div className="h-screen w-full flex flex-col justify-center items-center bg-white">
+    <div className="h-screen w-full flex flex-col justify-center items-center bg-[#F4FAF9]">
       
       {/* Lottie Spinner */}
       <div className="w-44 h-44">

@@ -95,10 +95,11 @@ const Payment = () => {
   }
 
   return (
-    <div className="w-11/12 md:w-1/2 mx-auto py-12 space-y-6">
+    <div className="w-11/12 mx-auto  space-y-6">
       <h2 className="text-2xl font-bold text-primary">
         Pay for Scholarship: {scholarship.scholarshipName}
       </h2>
+      
       <p className="text-lg">
         Application Fee: ${Number(scholarship.applicationFees)} <br />
         Service Charge: ${Number(scholarship.serviceCharge)} <br />
@@ -115,7 +116,7 @@ const Payment = () => {
       ) : (
         <button
           onClick={handlePayment}
-          className="bg-secondary hover:bg-secondary/80 text-white px-6 py-3 rounded-xl font-semibold transition"
+          className=" btn btn-secondary btn-outline  rounded-bl-2xl rounded-tr-2xl font-semibold transition"
           disabled={loading}
         >
           {loading ? "Processing..." : "Pay & Apply"}

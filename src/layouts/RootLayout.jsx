@@ -31,14 +31,14 @@ const RootLayout = () => {
 
     return (
         <div className='bg-[#F4FAF9] max-w-[1600px] mx-auto '>
-            <div className='min-h-screen'>
+            <div className=''>
                 <section
-                  className={`sticky top-0 z-50 bg-[#F4FAF9] transition-shadow duration-300 ${shadow ? 'shadow-lg' : ''}`}
+                  className={`sticky top-0  z-50 bg-[#F4FAF9] transition-shadow duration-300 ${shadow ? 'shadow-lg' : ''}`}
                 >
                   <Navbar />
                 </section>
                 <Outlet />
-                {/* <Footer></Footer> */}
+                <Footer></Footer>
             </div>
         </div>
     );

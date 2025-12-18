@@ -3,6 +3,7 @@ import useAuth from '../hooks/useAuth';
 import useRole from '../hooks/useRole';
 import LoadingScreen from '../components/Loading/LoadingScreen';
 import Forbidden from '../components/error/Forbidden';
+import LoadingData from '../components/Loading/LoadingData';
 
 
 const AdminRoute = ({ children }) => {
@@ -10,7 +11,7 @@ const AdminRoute = ({ children }) => {
     const { role, roleLoading } = useRole()
 
     if (loading || roleLoading) {
-        return <LoadingScreen/>
+        return <LoadingData/>
     }
 
     if (role !== 'admin') {

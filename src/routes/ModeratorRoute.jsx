@@ -2,6 +2,7 @@ import React from 'react';
 import useAuth from '../hooks/useAuth';
 import useRole from '../hooks/useRole';
 import Forbidden from '../components/error/Forbidden';
+import LoadingScreen from '../components/Loading/LoadingScreen';
 
 const ModeratorRoute = ({children}) => {
 

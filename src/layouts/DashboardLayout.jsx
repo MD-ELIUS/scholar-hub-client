@@ -4,7 +4,6 @@ import { LayoutDashboard, Users, UserCheck, BookOpen, BarChart2, FileUser, UserS
 import { FiLogOut, FiChevronLeft, FiChevronRight, FiX, FiHome } from 'react-icons/fi';
 import avatarImg from '../assets/avatar.png';
 import useAuth from '../hooks/useAuth';
-import LoadingScreen from '../components/Loading/LoadingScreen';
 import logo from "../assets/logo.png"
 import useRole from '../hooks/useRole';
 import { GrFormAdd } from 'react-icons/gr';
@@ -15,6 +14,7 @@ import LoadingDashboard from '../components/Loading/LoadingDashboard';
 
 const DashboardLayout = () => {
   const { user, logOut, loading } = useAuth();
+  
   const [sidebarOpen, setSidebarOpen] = useState(false); // mobile
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false); // desktop
   // const role = "Admin"; 
@@ -62,10 +62,8 @@ const DashboardLayout = () => {
 
   const mainColSpan = sidebarCollapsed ? 'lg:col-span-11' : 'lg:col-span-9';
 
+  if(loading || roleLoading ) return <LoadingDashboard></LoadingDashboard>
 
-  if (loading || roleLoading) {
-    return <LoadingDashboard></LoadingDashboard>
-  }
 
   return (
 

@@ -4,7 +4,7 @@ import loadingAnimation from "../../assets/lottie/loading-animation.json"
 
 const LoadingScreen = () => {
   return (
-    <div className="h-screen w-screen flex flex-col justify-center items-center bg-white">
+    <div className="h-screen w-screen flex flex-col justify-center items-center bg-[#F4FAF9]">
       {/* Lottie spinner */}
       <div className="w-40 h-40">
         <Lottie animationData={loadingAnimation} loop={true} />

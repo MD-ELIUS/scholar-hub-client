@@ -34,12 +34,12 @@ const {user, logOut } = useAuth() ;
   }, []);
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative " ref={dropdownRef}>
       {/* Avatar Button */}
 <button
   onClick={() => setOpen(!open)}
-  className="w-10 h-10 lg:w-14 lg:h-14 rounded-full overflow-hidden border border-primary
-  flex items-center justify-center bg-white"
+  className="w-8 h-8 md:w-10 md:h-10   rounded-full overflow-hidden border border-primary
+  flex items-center justify-center bg-white cursor-pointer"
 >
   <img
     src={user?.photoURL || avatarImg}
@@ -51,7 +51,7 @@ const {user, logOut } = useAuth() ;
 
       {/* Dropdown */}
       <div
-  className={`absolute right-0 mt-4 max-w-48 bg-primary shadow-lg rounded-bl-2xl rounded-tr-2xl 
+  className={`absolute right-0 mt-3 md:mt-4 max-w-48 bg-primary shadow-lg rounded-bl-2xl rounded-tr-2xl 
   transition-all duration-200
   ${open ? "opacity-100 scale-100 z-50" : "opacity-0 scale-95 pointer-events-none"}`}
 >
@@ -61,7 +61,7 @@ const {user, logOut } = useAuth() ;
     <li>
       <Link
         to="/dashboard"
-        className="flex items-center gap-2 px-3 py-2 w-full text-lg font-medium hover:bg-secondary rounded-bl-2xl rounded-tr-2xl "
+        className="flex items-center gap-1 md:gap-2 px-2 py-1 md:px-3 md:py-2 w-full  font-medium hover:bg-secondary rounded-bl-2xl rounded-tr-2xl "
         onClick={() => setOpen(false)}
       >
         <LayoutDashboard size={18} />
@@ -76,7 +76,7 @@ const {user, logOut } = useAuth() ;
           handleLogOut(),
           setOpen(false);
         }}
-        className="flex items-center gap-2 px-3 py-2 w-full text-lg font-medium btn btn-secondary btn-outline rounded-bl-2xl rounded-tr-2xl "
+        className="flex items-center gap-1 md:gap-2 px-2 py-1 md:px-3 md:py-2 w-full  font-medium btn btn-secondary btn-outline rounded-bl-2xl rounded-tr-2xl "
       >
        <FiLogOut />
         <span>Logout</span>

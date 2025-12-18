@@ -23,11 +23,13 @@ import AllReviews from "../pages/Moderator/AllReviews";
 import StudentRoute from "./StudentRoute";
 import ModeratorRoute from "./ModeratorRoute";
 import AdminAnalytics from "../pages/Admin/AdminAnalytics";
+import ErrorPage from "../components/error/ErrorPage";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     Component: RootLayout,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         index: true,

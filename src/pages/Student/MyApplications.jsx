@@ -229,7 +229,7 @@ const MyApplications = () => {
                                                 {app.paymentStatus}
                                             </span>
                                         ) : (
-                                            <button className="bg-secondary hover:bg-secondary/80 text-white px-2 py-1 rounded-lg text-sm font-semibold" onClick={() => handlePay(app)}>
+                                            <button className=" btn btn-secondary btn-outline  rounded-bl-2xl rounded-tr-2xl px-2 py-1  text-sm font-semibold" onClick={() => handlePay(app)}>
                                                 Pay
                                             </button>
                                         )}
@@ -246,11 +246,7 @@ const MyApplications = () => {
                                                         <FaEdit size={18} />
                                                     </button>
 
-                                                    {app.paymentStatus === "unpaid" && (
-                                                        <button className="bg-secondary hover:bg-secondary/80 text-white px-2 py-1 rounded-lg text-sm font-semibold" onClick={() => handlePay(app)}>
-                                                            Pay
-                                                        </button>
-                                                    )}
+                                                  
 
                                                     <button className="text-red-500 hover:text-red-700" onClick={() => handleDelete(app)}>
                                                         <RiDeleteBin6Line size={18} />
@@ -264,7 +260,7 @@ const MyApplications = () => {
                                                     
 
                                                     {app.paymentStatus === "unpaid" && (
-                                                        <button className="bg-secondary hover:bg-secondary/80 text-white px-2 py-1 rounded-lg text-sm font-semibold" onClick={() => handlePay(app)}>
+                                                        <button className=" btn btn-secondary btn-outline  rounded-bl-2xl rounded-tr-2xl text-sm font-semibold" onClick={() => handlePay(app)}>
                                                             Pay
                                                         </button>
                                                     )}

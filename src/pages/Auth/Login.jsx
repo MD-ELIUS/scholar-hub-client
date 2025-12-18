@@ -5,6 +5,7 @@ import Lottie from "lottie-react";
 import loginAnimation from "../../assets/lottie/login-animation.json"; 
 import useAuth from "../../hooks/useAuth";
 import SocialLogin from "./SocialLogin";
+import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 
 const Login = () => {
   const { register, formState: { errors }, handleSubmit } = useForm();
@@ -12,26 +13,28 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [firebaseError, setFirebaseError] = useState("");   // ⭐ ADDED
+  const [firebaseError, setFirebaseError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false); // ⭐ loading state
 
   const handleLogin = (data) => {
-    console.log("form data", data);
-
-    setFirebaseError(""); // clear previous error
+    setFirebaseError("");
+    setLoading(true); // start loading
 
     signInUser(data.email, data.password)
       .then((result) => {
-        console.log(result.user);
+        console.log(result)
+        setLoading(false); // stop loading
         navigate(`${location.state ? location.state : "/"}`);
       })
       .catch((error) => {
-        console.log(error);
-        setFirebaseError(error.message);   // ⭐ ADDED
+        setLoading(false); // stop loading
+        setFirebaseError(error.message);
       });
   };
 
   return (
-    <div className="w-11/12 mx-auto py-10  min-h-screen flex items-center justify-center">
+    <div className="w-11/12 mx-auto py-10 flex items-center justify-center">
       <div className="grid lg:grid-cols-2 gap-0 lg:gap-10 items-start w-full max-w-6xl">
 
         {/* LEFT SIDE — FORM */}
@@ -41,7 +44,7 @@ const Login = () => {
           </h2>
 
           <form className="space-y-4" onSubmit={handleSubmit(handleLogin)}>
-            <fieldset className="fieldset space-y-4">
+            <fieldset className="fieldset space-y-2">
 
               {/* Email */}
               <label className="label">Email</label>
@@ -57,27 +60,47 @@ const Login = () => {
 
               {/* Password */}
               <label className="label">Password</label>
-              <input
-                type="password"
-                {...register("password", { required: true, minLength: 6 })}
-                className="input w-full input-bordered border-primary focus:border-primary rounded-tr-2xl rounded-bl-2xl"
-                placeholder="Password"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  {...register("password", { required: true, minLength: 6 })}
+                  className="input w-full input-bordered border-primary focus:border-primary pr-12 rounded-tr-2xl rounded-bl-2xl"
+                  placeholder="Password"
+                />
+
+                {/* Show/Hide Eye */}
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary cursor-pointer text-xl"
+                >
+                  <span className="tooltip" data-tip={showPassword ? "Hide Password" : "Show Password"}>
+                    {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
+                  </span>
+                </button>
+              </div>
+
               {errors.password?.type === "minLength" && (
                 <p className="text-red-500">Password must be 6 characters or longer</p>
               )}
 
-              {/* ⭐ Firebase Login Error (ADDED) */}
               {firebaseError && (
                 <p className="text-red-500">{firebaseError}</p>
               )}
 
               <div>
-                <a className="link link-hover text-sm text-primary">Forgot password?</a>
+                <a className="link link-hover text-sm text-primary">
+                  Forgot password?
+                </a>
               </div>
 
-              <button className="btn btn-secondary btn-outline mt-2 w-full text-black hover:text-white font-semibold rounded-tr-2xl rounded-bl-2xl">
-                Login
+              {/* Login Button */}
+              <button
+                type="submit"
+                className="btn btn-secondary btn-outline mt-2 w-full text-black hover:text-white font-semibold rounded-tr-2xl rounded-bl-2xl"
+                disabled={loading}
+              >
+                {loading ? "Logging.." : "Login"}
               </button>
             </fieldset>
           </form>
@@ -96,18 +119,18 @@ const Login = () => {
               Register Now
             </Link>
           </p>
-
         </div>
 
-        {/* RIGHT SIDE — LOTTIE (Large screen) */}
+        {/* RIGHT SIDE — LOTTIE */}
         <div className="hidden lg:flex justify-center items-center mt-10 flex-1">
-          <Lottie animationData={loginAnimation} loop={true} className="w-full max-w-lg" />
+          <Lottie animationData={loginAnimation} loop className="w-full max-w-lg" />
         </div>
 
-        {/* Mobile Lottie */}
+        {/* MOBILE LOTTIE */}
         <div className="lg:hidden flex justify-center items-center mt-6">
-          <Lottie animationData={loginAnimation} loop={true} className="w-3/4 max-w-sm" />
+          <Lottie animationData={loginAnimation} loop className="w-3/4 max-w-sm" />
         </div>
+
       </div>
     </div>
   );

@@ -51,6 +51,7 @@ const EditScholarshipModal = ({ scholarship, onUpdated, onClose }) => {
         "serviceCharge",
         "totalAmount",
         "deadline",
+        "description", // ✅ added
       ];
       fields.forEach((field) => setValue(field, scholarship[field]));
 
@@ -63,7 +64,11 @@ const EditScholarshipModal = ({ scholarship, onUpdated, onClose }) => {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const updatedScholarship = { ...data, postDate: scholarship.postDate, userEmail: scholarship.userEmail };
+      const updatedScholarship = {
+        ...data,
+        postDate: scholarship.postDate,
+        userEmail: scholarship.userEmail,
+      };
 
       // Upload new image if provided
       if (data.image && data.image.length > 0) {
@@ -79,7 +84,10 @@ const EditScholarshipModal = ({ scholarship, onUpdated, onClose }) => {
         updatedScholarship.image = scholarship.image;
       }
 
-      const res = await axiosSecure.patch(`/scholarships/${scholarship._id}`, updatedScholarship);
+      const res = await axiosSecure.patch(
+        `/scholarships/${scholarship._id}`,
+        updatedScholarship
+      );
 
       if (res.data.modifiedCount > 0) {
         Swal.fire({
@@ -99,30 +107,44 @@ const EditScholarshipModal = ({ scholarship, onUpdated, onClose }) => {
   };
 
   const inputStyle = "input input-bordered w-full rounded-tr-2xl rounded-bl-2xl";
-  const fileStyle = "file-input file-input-bordered w-full rounded-tr-2xl rounded-bl-2xl";
+  const fileStyle =
+    "file-input file-input-bordered w-full rounded-tr-2xl rounded-bl-2xl";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-3">
       <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-white rounded-bl-2xl rounded-tr-2xl border border-primary/30 shadow-xl p-6">
-        
+
         {/* Close Button */}
-        <button onClick={onClose} className="absolute top-3 right-3 text-primary hover:text-red-500">
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-3 text-primary hover:text-red-500"
+        >
           <IoClose size={28} />
         </button>
 
-        <h2 className="text-2xl font-bold text-primary mb-6 text-center">Edit Scholarship</h2>
+        <h2 className="text-2xl font-bold text-primary mb-6 text-center">
+          Edit Scholarship
+        </h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Scholarship Name */}
           <div>
             <label className="text-sm">Scholarship Name</label>
-            <input type="text" {...register("scholarshipName", { required: true })} className={inputStyle} />
+            <input
+              type="text"
+              {...register("scholarshipName", { required: true })}
+              className={inputStyle}
+            />
           </div>
 
           {/* University Name */}
           <div>
             <label className="text-sm">University Name</label>
-            <input type="text" {...register("universityName", { required: true })} className={inputStyle} />
+            <input
+              type="text"
+              {...register("universityName", { required: true })}
+              className={inputStyle}
+            />
           </div>
 
           {/* Image */}
@@ -130,7 +152,11 @@ const EditScholarshipModal = ({ scholarship, onUpdated, onClose }) => {
             <label className="text-sm">Image</label>
             <input type="file" {...register("image")} className={fileStyle} />
             {scholarship.image && (
-              <img src={scholarship.image} alt="scholarship" className="mt-2 w-32 h-20 object-cover rounded-lg border" />
+              <img
+                src={scholarship.image}
+                alt="scholarship"
+                className="mt-2 w-32 h-20 object-cover rounded-lg border"
+              />
             )}
           </div>
 
@@ -142,13 +168,20 @@ const EditScholarshipModal = ({ scholarship, onUpdated, onClose }) => {
                 type="text"
                 {...register("country", { required: true })}
                 value={countryInput}
-                onChange={(e) => { setCountryInput(e.target.value); setSelectedCountry(""); }}
+                onChange={(e) => {
+                  setCountryInput(e.target.value);
+                  setSelectedCountry("");
+                }}
                 className={inputStyle}
               />
               {countryInput && !selectedCountry && (
                 <div className="absolute w-full mt-1 max-h-40 overflow-y-auto bg-white border rounded-lg z-50 shadow-lg">
                   {filteredCountries.map((c, i) => (
-                    <p key={i} onClick={() => handleCountrySelect(c)} className="px-3 py-2 cursor-pointer hover:bg-gray-200">
+                    <p
+                      key={i}
+                      onClick={() => handleCountrySelect(c)}
+                      className="px-3 py-2 cursor-pointer hover:bg-gray-200"
+                    >
                       {c.country}
                     </p>
                   ))}
@@ -162,7 +195,9 @@ const EditScholarshipModal = ({ scholarship, onUpdated, onClose }) => {
                 type="text"
                 {...register("city", { required: true })}
                 disabled={!selectedCountry}
-                className={`${inputStyle} ${!selectedCountry ? "bg-gray-200 cursor-not-allowed" : ""}`}
+                className={`${inputStyle} ${
+                  !selectedCountry ? "bg-gray-200 cursor-not-allowed" : ""
+                }`}
               />
             </div>
           </div>
@@ -171,11 +206,7 @@ const EditScholarshipModal = ({ scholarship, onUpdated, onClose }) => {
           <div className="grid md:grid-cols-3 gap-4">
             <div>
               <label className="text-sm">Degree</label>
-              <select
-                {...register("degree", { required: true })}
-                className={inputStyle}
-                defaultValue={scholarship.degree || ""}
-              >
+              <select {...register("degree", { required: true })} className={inputStyle}>
                 <option value="">Select Degree</option>
                 <option value="Bachelor">Bachelor</option>
                 <option value="Postgraduate">Postgraduate</option>
@@ -185,11 +216,7 @@ const EditScholarshipModal = ({ scholarship, onUpdated, onClose }) => {
             </div>
             <div>
               <label className="text-sm">Subject Category</label>
-              <select
-                {...register("subjectCategory", { required: true })}
-                className={inputStyle}
-                defaultValue={scholarship.subjectCategory || ""}
-              >
+              <select {...register("subjectCategory", { required: true })} className={inputStyle}>
                 <option value="">Select Subject Category</option>
                 <option value="Engineering">Engineering</option>
                 <option value="Medical">Medical</option>
@@ -200,18 +227,27 @@ const EditScholarshipModal = ({ scholarship, onUpdated, onClose }) => {
             </div>
             <div>
               <label className="text-sm">Scholarship Category</label>
-              <select
-                {...register("scholarshipCategory", { required: true })}
-                className={inputStyle}
-                defaultValue={scholarship.scholarshipCategory || ""}
-              >
+              <select {...register("scholarshipCategory", { required: true })} className={inputStyle}>
                 <option value="">Select Scholarship Category</option>
                 <option value="Fully Funded">Fully Funded</option>
                 <option value="Partially Funded">Partially Funded</option>
                 <option value="Tuition Only">Tuition Only</option>
-                <option value="Living Expenses Covered">Living Expenses Covered</option>
+                <option value="Living Expenses Covered">
+                  Living Expenses Covered
+                </option>
               </select>
             </div>
+          </div>
+
+          {/* ✅ Scholarship Description */}
+          <div>
+            <label className="text-sm">Scholarship Description</label>
+            <textarea
+              {...register("description", { required: true })}
+              rows={8}
+              placeholder="Enter full scholarship details (eligibility, benefits, application process, documents, etc.)"
+              className="textarea w-full rounded-tr-2xl rounded-bl-2xl border"
+            />
           </div>
 
           {/* Fees + Deadline */}
@@ -225,6 +261,7 @@ const EditScholarshipModal = ({ scholarship, onUpdated, onClose }) => {
               <input type="number" {...register("totalAmount", { required: true })} className={inputStyle} />
             </div>
           </div>
+
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <label className="text-sm">Application Fees</label>

@@ -63,7 +63,7 @@ const ScholarshipCard = ({ scholarship }) => {
       </div>
 
       {/* Content */}
-      <div className="p-4 flex flex-col gap-2 flex-grow">
+      <div className="p-4 flex flex-col gap-1 flex-grow">
         <h3 className="text-lg font-semibold text-primary truncate">
           {scholarship.scholarshipName}
         </h3>

@@ -6,6 +6,7 @@ import { CgClose, CgMenuGridR } from 'react-icons/cg';
 import { FiLogIn, FiUserPlus } from 'react-icons/fi';
 import useAuth from '../../../hooks/useAuth';
 import { Link } from 'react-router';
+import useRole from '../../../hooks/useRole';
 
 const Navbar = () => {
     const {user} = useAuth() ;
@@ -19,17 +20,17 @@ const Navbar = () => {
 ;
 
     return (
-        <div className='max-w-11/12 mx-auto flex justify-between items-center py-2'>
+        <div className='max-w-11/12 mx-auto flex justify-between items-center py-1 md:py-2'>
             <div className='flex items-center gap-2'>
-                    <div className='w-10 h-10 lg:w-14 lg:h-14'>
+                    <div className='w-8 h-8 md:w-10 md:h-10 '>
                 <img className='w-full h-full' src={logo} alt="" />
             </div>
             <div>
-                <h4 className='text-3xl font-bold text-primary'>Scholar<span className='text-secondary'>Hub</span></h4>
+                <h4 className='text-2xl md:text-3xl font-bold text-primary'>Scholar<span className='text-secondary'>Hub</span></h4>
             </div>
             </div>
 
-            <navbar className="bg-secondary font-medium py-2 px-10 shadow-md rounded-bl-2xl rounded-tr-2xl hidden lg:flex">
+            <navbar className="bg-secondary text-sm  font-medium pt-1 pb-2 px-10 shadow-md rounded-bl-2xl rounded-tr-2xl hidden lg:flex">
                   <ul className='flex items-center  gap-4'>
                        {renderLinks}
                   </ul>
@@ -42,18 +43,18 @@ const Navbar = () => {
             <div className='lg:hidden'>
                 <button
                     onClick={() => setOpen(!open)}
-                    className='text-3xl mt-2 text-primary focus:outline-none'
+                    className='text-3xl mt-2 text-primary focus:outline-none cursor-pointer'
                 >
                     {open ? <CgClose /> : <CgMenuGridR />}
                 </button>
             </div>
 
             {/* Mobile Menu */}
-<div className={`absolute left-2 right-1/2 top-12.5 my-4 max-w-48 bg-secondary shadow-lg rounded-bl-2xl rounded-tr-2xl
+<div className={`absolute left-2 right-1/2 top-9.5 my-4 max-w-48 bg-secondary shadow-lg rounded-bl-2xl rounded-tr-2xl
   transition-all duration-200
   ${open ? "opacity-100 scale-100 z-50" : "opacity-0 scale-95 pointer-events-none"} lg:hidden`}
 >
-  <ul className='flex flex-col gap-2 font-medium text-lg text-white py-2 mx-2'>
+  <ul className='flex flex-col gap-2 font-medium  text-white py-2 mx-2'>
     {renderLinks} {/* Close menu on link click */}
   </ul>
 </div>

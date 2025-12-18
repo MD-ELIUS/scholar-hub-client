@@ -11,7 +11,7 @@ const Banner = () => {
     
       {/* Text Section */}
 <div className="lg:w-1/2 space-y-6 text-center lg:text-left flex flex-col justify-center">
-  <h1 className="text-[2rem] sm:text-[2.5rem] md:text-4xl lg:text-6xl font-bold leading-tight">
+  <h1 className="text-[2rem] sm:text-[2.5rem] md:text-4xl lg:text-5xl font-bold leading-tight">
     Discover Scholarships <br /> That Fit Your Goals
   </h1>
   <p className="text-base sm:text-lg md:text-xl lg:text-xl text-primary/80">
@@ -24,7 +24,7 @@ const Banner = () => {
 </div>
 
           {/* Lottie Animation Section */}
-      <div className=" h-[350px] lg:h-[450px] ">
+      <div className=" h-[350px] lg:h-[450px] lg:-mr-6 ">
         <Lottie 
           animationData={bannerAnimation} 
           loop={true} 
