@@ -10,7 +10,7 @@ const DashboardHomeLayout = () => {
   const { role} = useRole();
 
 
-  // 🔹 Conditional rendering based on role
+  // Conditional rendering based on role
   if (role === "student") return <StudentHome />;
   if (role === "moderator") return <ModeratorHome />;
   if (role === "admin") return <AdminHome />;

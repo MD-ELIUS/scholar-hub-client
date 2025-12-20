@@ -6,12 +6,12 @@ import useAuth from "../../hooks/useAuth";
 const PaymentCancelled = () => {
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
-  const {user} = useAuth()
+  const { user } = useAuth()
 
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 🔹 Fetch latest unpaid application for the logged-in user
+  //  Fetch latest unpaid application for the logged-in user
   useEffect(() => {
     const fetchCancelledInfo = async () => {
       try {

@@ -132,7 +132,7 @@ const MyReviews = () => {
                                     <td className="text-center text-primary">{index + 1}</td>
                                     <td className="text-center text-primary font-semibold">{sch.scholarshipName || "-"}</td>
                                     <td className="text-center text-primary">{sch.universityName || "-"}</td>
-                                    <td className="text-center text-primary">{review.reviewComment}</td>
+                                    <td className="text-center text-primary max-w-[200px] truncate">{review.reviewComment}</td>
                                     <td className="text-center text-primary">{new Date(review.reviewDate).toLocaleDateString()}</td>
                                     <td className="text-center">
                                         <Rating style={{ maxWidth: 100 }} value={review.ratingPoint} readOnly />
@@ -161,10 +161,28 @@ const MyReviews = () => {
                         <h3 className="text-xl font-semibold text-primary mb-4">
                             Edit Review: {reviewModal.review.scholarshipData?.scholarshipName || "-"}
                         </h3>
-                        <form onSubmit={submitReview} className="space-y-4">
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                if (starRating === 0) {
+                                    Swal.fire("Error", "Rating is required.", "error");
+                                    return;
+                                }
+                                if (commentText.length > 200) {
+                                    Swal.fire("Error", "Comment cannot exceed 200 characters.", "error");
+                                    return;
+                                }
+                                submitReview(e);
+                            }}
+                            className="space-y-4"
+                        >
                             <div>
                                 <label className="block font-medium mb-1">Rating</label>
-                                <Rating style={{ maxWidth: 200 }} value={starRating} onChange={setStarRating} />
+                                <Rating
+                                    style={{ maxWidth: 200 }}
+                                    value={starRating}
+                                    onChange={setStarRating}
+                                />
                             </div>
                             <div>
                                 <label className="block font-medium">Comment</label>
@@ -174,8 +192,13 @@ const MyReviews = () => {
                                     required
                                     className="textarea w-full border-secondary/50 rounded-lg"
                                     value={commentText}
-                                    onChange={(e) => setCommentText(e.target.value)}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        if (value.length <= 200) setCommentText(value);
+                                    }}
+                                    placeholder="Enter your comment (max 200 characters)"
                                 ></textarea>
+                                <p className="text-gray-500 text-sm mt-1">{commentText.length}/200</p>
                             </div>
                             <div className="flex justify-end gap-2">
                                 <button
@@ -196,6 +219,7 @@ const MyReviews = () => {
                     </div>
                 </div>
             )}
+
         </div>
     );
 };

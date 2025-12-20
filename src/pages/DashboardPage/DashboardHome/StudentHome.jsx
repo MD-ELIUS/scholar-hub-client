@@ -19,7 +19,7 @@ import {
   CartesianGrid
 } from "recharts";
 
-// ✅ Animation
+//  Animation
 import { motion } from "framer-motion";
 import LoadingData from "../../../components/Loading/LoadingData";
 
@@ -65,18 +65,18 @@ const StudentHome = () => {
   const completed = applications.filter((app) => app.applicationStatus === "completed").length;
   const rejected = applications.filter((app) => app.applicationStatus === "rejected").length;
   const totalReviews = reviews.length;
-  
-const paidApplications = applications.filter(
-  (app) => app.paymentStatus === "paid"
-);
 
-const totalSpent = paidApplications.reduce(
-  (sum, app) =>
-    sum +
-    (Number(app.applicationFees || 0) +
-      Number(app.serviceCharge || 0)),
-  0
-);
+  const paidApplications = applications.filter(
+    (app) => app.paymentStatus === "paid"
+  );
+
+  const totalSpent = paidApplications.reduce(
+    (sum, app) =>
+      sum +
+      (Number(app.applicationFees || 0) +
+        Number(app.serviceCharge || 0)),
+    0
+  );
 
 
   const pieData = [

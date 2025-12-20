@@ -18,7 +18,7 @@ const TopScholarships = () => {
     },
   });
 
-  // ✅ UPDATED (only this line)
+
   const { scholarships = [] } = data;
 
   // Sort → lowest applicationFees first → fallback: latest postDate
@@ -32,6 +32,8 @@ const TopScholarships = () => {
       return new Date(b.postDate) - new Date(a.postDate); // newer first
     })
     .slice(0, 8);
+
+  console.log(sortedScholarships)
 
   return (
     <div className="w-11/12 my-14 mx-auto">

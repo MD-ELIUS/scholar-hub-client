@@ -54,7 +54,7 @@ const Faq = () => {
               onClick={() => setOpen(open === index ? null : index)}
               className="w-full flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5 text-lef cursor-pointer"
             >
-              <span className="text-primary font-semibold text-xs sm:text-sm md:text-base lg:text-lg leading-snug">
+              <span className="text-primary font-semibold text-sm md:text-base lg:text-lg leading-snug">
                 {item.q}
               </span>
 

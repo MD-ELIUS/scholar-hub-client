@@ -4,9 +4,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import EditScholarshipModal from "./EditScholarshipModal"; // import the modal
+import EditScholarshipModal from "./EditScholarshipModal";
 import { IoClose } from "react-icons/io5";
-import LoadingData from "../../components/Loading/LoadingData";
 
 const ManageScholarships = () => {
   const axiosSecure = useAxiosSecure();
@@ -15,29 +14,28 @@ const ManageScholarships = () => {
   const [searchText, setSearchText] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
   const [filterSubject, setFilterSubject] = useState("");
-  
-
-  // NEW STATE FOR EDIT MODAL
+  const [currentPage, setCurrentPage] = useState(1);
   const [editingScholarship, setEditingScholarship] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const limit = 12; // items per page
 
-  // Fetch scholarships with search & filters
-const { data = {}, isLoading } = useQuery({
-  queryKey: ["scholarships", searchText, filterCategory, filterSubject],
-  queryFn: async () => {
-    const params = new URLSearchParams({
-      search: searchText,
-      scholarshipCategory: filterCategory,
-      subjectCategory: filterSubject,
-    }).toString();
+  const { data = {}, isLoading } = useQuery({
+    queryKey: ["scholarships", searchText, filterCategory, filterSubject, currentPage],
+    queryFn: async () => {
+      const params = new URLSearchParams({
+        search: searchText,
+        scholarshipCategory: filterCategory,
+        subjectCategory: filterSubject,
+        page: currentPage,
+        limit
+      }).toString();
 
-    const res = await axiosSecure.get(`/scholarships?${params}`);
-    return res.data;
-  },
-});
+      const res = await axiosSecure.get(`/scholarships?${params}`);
+      return res.data;
+    },
+  });
 
-const { scholarships = [] } = data;
-
+  const { scholarships = [], totalCount = 0, totalPages = 1 } = data;
 
   const handleDelete = async (id, scholarshipName) => {
     const confirm = await Swal.fire({
@@ -61,27 +59,26 @@ const { scholarships = [] } = data;
     }
   };
 
-  // NEW: Open modal for editing
   const handleEditClick = (scholarship) => {
     setEditingScholarship(scholarship);
     setIsModalOpen(true);
   };
 
-  // Refresh table after edit
   const handleUpdated = () => {
     queryClient.invalidateQueries(["scholarships"]);
     setIsModalOpen(false);
     setEditingScholarship(null);
   };
 
-
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="w-full p-6 bg-white shadow-lg border border-secondary/50 rounded-tr-2xl rounded-bl-2xl">
-    <h2 className="text-xl md:text-2xl lg:text-3xl text-primary font-semibold mb-6">
-  Manage Scholarships ({scholarships.length})
-</h2>
-
+      <h2 className="text-xl md:text-2xl lg:text-3xl text-primary font-semibold mb-6">
+        All Scholarships ({totalCount})
+      </h2>
 
       {/* SEARCH + FILTER */}
       <div className="flex flex-wrap gap-4 mb-6">
@@ -90,13 +87,19 @@ const { scholarships = [] } = data;
           placeholder="Search by Scholarship, University, Degree or country"
           className="input w-full max-w-xs outline-none border-secondary/50 rounded-bl-2xl rounded-tr-2xl"
           value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
+          onChange={(e) => {
+            setSearchText(e.target.value);
+            setCurrentPage(1); // reset page on search
+          }}
         />
 
         <select
           className="select w-full max-w-xs outline-none border-secondary/50 rounded-bl-2xl rounded-tr-2xl"
           value={filterCategory}
-          onChange={(e) => setFilterCategory(e.target.value)}
+          onChange={(e) => {
+            setFilterCategory(e.target.value);
+            setCurrentPage(1);
+          }}
         >
           <option value="">All Scholarship Categories</option>
           <option value="Fully Funded">Fully Funded</option>
@@ -108,7 +111,10 @@ const { scholarships = [] } = data;
         <select
           className="select w-full max-w-xs outline-none border-secondary/50 rounded-bl-2xl rounded-tr-2xl"
           value={filterSubject}
-          onChange={(e) => setFilterSubject(e.target.value)}
+          onChange={(e) => {
+            setFilterSubject(e.target.value);
+            setCurrentPage(1);
+          }}
         >
           <option value="">All Subject Categories</option>
           <option value="Engineering">Engineering</option>
@@ -117,8 +123,6 @@ const { scholarships = [] } = data;
           <option value="Arts">Arts</option>
           <option value="Science">Science</option>
         </select>
-
-        
       </div>
 
       {/* TABLE */}
@@ -155,14 +159,13 @@ const { scholarships = [] } = data;
 
             {scholarships.map((sch, index) => (
               <tr key={sch._id} className="hover:bg-gray-50">
-                <td className="text-center text-primary">{index + 1}</td>
+                <td className="text-center text-primary">{(currentPage - 1) * limit + index + 1}</td>
                 <td className="text-center text-primary font-semibold">{sch.scholarshipName}</td>
                 <td className="text-center text-primary">{sch.universityName}</td>
                 <td className="text-center text-primary">{sch.degree}</td>
                 <td className="text-center text-primary">{sch.subjectCategory}</td>
                 <td className="text-center text-primary">{sch.scholarshipCategory}</td>
                 <td className="text-center text-primary">{sch.country}</td>
-
                 <td className="text-center">
                   <div className="inline-flex gap-4 items-center justify-center">
                     <button
@@ -187,28 +190,56 @@ const { scholarships = [] } = data;
         </table>
       </div>
 
+      {/* PAGINATION */}
+      {totalPages > 1 && (
+        <div className="flex justify-center gap-2 mt-6">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="btn btn-secondary btn-outline rounded-tr-2xl rounded-bl-2xl  btn-sm"
+          >
+            Prev
+          </button>
+
+          {[...Array(totalPages)].map((_, i) => (
+            <button
+              key={i}
+              onClick={() => handlePageChange(i + 1)}
+              className={`btn btn-secondary btn-sm rounded-tr-2xl rounded-bl-2xl ${currentPage === i + 1 ? "  " : "btn-outline"}`}
+            >
+              {i + 1}
+            </button>
+          ))}
+
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="btn btn-secondary btn-outline rounded-tr-2xl rounded-bl-2xl  btn-sm"
+          >
+            Next
+          </button>
+        </div>
+      )}
+
       {/* EDIT MODAL */}
-    {isModalOpen && editingScholarship && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-    <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white rounded-bl-2xl rounded-tr-2xl border border-primary/30 shadow-xl p-6">
-      
-      {/* Close Button INSIDE modal */}
-      <button
-        onClick={() => setIsModalOpen(false)}
-        className="absolute top-3 right-3 text-primary hover:text-red-500"
-      >
-        <IoClose size={28} />
-      </button>
+      {isModalOpen && editingScholarship && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white rounded-bl-2xl rounded-tr-2xl border border-primary/30 shadow-xl p-6">
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="absolute top-3 right-3 text-primary hover:text-red-500"
+            >
+              <IoClose size={28} />
+            </button>
 
-      <EditScholarshipModal
-        scholarship={editingScholarship}
-        onUpdated={handleUpdated}
-        onClose={() => setIsModalOpen(false)}
-      />
-    </div>
-  </div>
-)}
-
+            <EditScholarshipModal
+              scholarship={editingScholarship}
+              onUpdated={handleUpdated}
+              onClose={() => setIsModalOpen(false)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

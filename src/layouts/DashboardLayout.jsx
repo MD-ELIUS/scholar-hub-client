@@ -11,18 +11,27 @@ import { VscDiffAdded } from 'react-icons/vsc';
 import { BsDatabaseFillGear } from 'react-icons/bs';
 import { SiGoogletagmanager } from 'react-icons/si';
 import LoadingDashboard from '../components/Loading/LoadingDashboard';
+import { useQueryClient } from '@tanstack/react-query';
+import useTitle from '../hooks/useTitle';
+
 
 const DashboardLayout = () => {
-  const { user, logOut, loading } = useAuth();
-  
+  useTitle("Dashboard");
+  const { user, logOut, } = useAuth();
+
   const [sidebarOpen, setSidebarOpen] = useState(false); // mobile
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false); // desktop
   // const role = "Admin"; 
   const { role, roleLoading } = useRole();
+  const queryClient = useQueryClient();
 
   const handleLogOut = () => {
     logOut()
-      .then(() => { })
+      .then(() => {
+
+        queryClient.clear();
+        localStorage.removeItem("token");
+      })
       .catch(err => console.log(err));
   };
 
@@ -44,14 +53,14 @@ const DashboardLayout = () => {
         { label: 'My Dashboard', to: '/dashboard', icon: <LayoutDashboard size={18} /> },
         { label: 'My Profile', to: '/dashboard/profile', icon: <UserCheck size={18} /> },
         { label: 'Manage Applications', to: '/dashboard/manage-applications', icon: <SiGoogletagmanager size={18} /> },
-        { label: 'All Reviews', to: '/dashboard/all-reviews', icon:    <Star size={18} /> },
+        { label: 'All Reviews', to: '/dashboard/all-reviews', icon: <Star size={18} /> },
       ];
     } else if (role === 'student') {
       return [
         { label: 'My Dashboard', to: '/dashboard', icon: <LayoutDashboard size={18} /> },
         { label: 'My Profile', to: '/dashboard/profile', icon: <UserCheck size={18} /> },
-        { label: 'My Applications', to: '/dashboard/my-applications', icon:  <FileUser size={18}  /> },
-        { label: 'My Reviews', to: '/dashboard/my-reviews', icon:  <UserStar size={18} /> },
+        { label: 'My Applications', to: '/dashboard/my-applications', icon: <FileUser size={18} /> },
+        { label: 'My Reviews', to: '/dashboard/my-reviews', icon: <UserStar size={18} /> },
       ];
     }
 
@@ -62,7 +71,7 @@ const DashboardLayout = () => {
 
   const mainColSpan = sidebarCollapsed ? 'lg:col-span-11' : 'lg:col-span-9';
 
-  if(loading || roleLoading ) return <LoadingDashboard></LoadingDashboard>
+  if (roleLoading || !role) return <LoadingDashboard></LoadingDashboard>
 
 
   return (

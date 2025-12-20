@@ -8,13 +8,13 @@ import useAuth from "../hooks/useAuth";
 const ScholarshipCard = ({ scholarship }) => {
   const { user } = useAuth();
 
-  // ✅ check if current user already applied for this scholarship
+  // check if current user already applied for this scholarship
   const { data: appliedApplication } = useQuery({
     queryKey: ["applied-check", scholarship._id, user?.email],
     enabled: !!user?.email && !!scholarship?._id,
     queryFn: async () => {
       const res = await axios.get(
-        "http://localhost:3000/applications/check",
+        "https://scholar-hub-server-phi.vercel.app/applications/check",
         {
           params: {
             scholarshipId: scholarship._id,
@@ -30,7 +30,7 @@ const ScholarshipCard = ({ scholarship }) => {
 
   return (
     <div className="relative bg-white shadow-lg rounded-bl-2xl rounded-tr-2xl overflow-hidden border border-secondary/30 hover:shadow-xl transition duration-300 h-full flex flex-col">
-      
+
       {/* Labels */}
       <div className="absolute top-3 left-3 flex flex-col gap-1 z-10">
         <span className="bg-primary text-white text-xs font-semibold px-3 py-1 rounded-bl-2xl rounded-tr-2xl">
@@ -44,7 +44,7 @@ const ScholarshipCard = ({ scholarship }) => {
         </span>
       </div>
 
-      {/* ✅ Applied Badge (from applications collection) */}
+      {/*  Applied Badge (from applications collection) */}
       {isApplied && (
         <div className="absolute top-3 right-3 z-10">
           <span className="bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-bl-2xl rounded-tr-2xl shadow-md">

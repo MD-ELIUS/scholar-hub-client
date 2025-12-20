@@ -3,8 +3,10 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import ScholarshipCard from "../../components/ScholarshipCard";
 import { useLocation } from "react-router";
+import useTitle from "../../hooks/useTitle";
 
 const AllScholarshipsPage = () => {
+  useTitle("All Scholarships");
   const axiosSecure = useAxiosSecure();
   const location = useLocation();
 
@@ -16,7 +18,7 @@ const AllScholarshipsPage = () => {
   const [filterSubject, setFilterSubject] = useState("");
   const [sortBy, setSortBy] = useState("");
   const [page, setPage] = useState(1);
-  const limit = 8;
+  const limit = 12;
 
   // ✅ ADD THIS
   useEffect(() => {
@@ -156,11 +158,10 @@ const AllScholarshipsPage = () => {
               <button
                 key={num}
                 onClick={() => setPage(num + 1)}
-                className={`btn ${
-                  page === num + 1
+                className={`btn ${page === num + 1
                     ? "btn-secondary rounded-bl-2xl rounded-tr-2xl"
                     : "btn-outline btn-secondary rounded-bl-2xl rounded-tr-2xl"
-                }`}
+                  }`}
               >
                 {num + 1}
               </button>

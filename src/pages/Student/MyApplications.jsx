@@ -19,6 +19,8 @@ const MyApplications = () => {
     const [searchText, setSearchText] = useState("");
     const [reviewModal, setReviewModal] = useState({ isOpen: false, app: null });
     const [starRating, setStarRating] = useState(0); // ⭐ for star rating
+    const [commentText, setCommentText] = useState("");
+    const [commentError, setCommentError] = useState("");
 
     // 🔹 Fetch user reviews
     const { data: myReviews = [] } = useQuery({
@@ -130,18 +132,20 @@ const MyApplications = () => {
 
     const handleAddReview = (app) => {
         setStarRating(0); // reset star rating
+        setCommentText("");
+        setCommentError("");
         setReviewModal({ isOpen: true, app });
     };
 
     const submitReview = async (e) => {
         e.preventDefault();
-        const comment = e.target.comment.value;
+        if (commentText.length > 200) return; // prevent submit if exceed
         const app = reviewModal.app;
 
         try {
             const res = await axiosSecure.post(`/applications/${app._id}/review`, {
                 rating: starRating,
-                comment
+                comment: commentText
             });
 
             if (res.status === 201 || res.status === 200) {
@@ -159,9 +163,6 @@ const MyApplications = () => {
             }
         }
     };
-
-  
-
 
     return (
         <div className="w-full p-6 bg-white shadow-lg border border-secondary/50 rounded-tr-2xl rounded-bl-2xl">
@@ -216,13 +217,13 @@ const MyApplications = () => {
                             return (
                                 <tr key={app._id} className="hover:bg-gray-50">
                                     <td className="text-center text-primary">{index + 1}</td>
-                                    <td className="text-center text-primary font-semibold">{sch.scholarshipName  || app.scholarshipName}</td>
+                                    <td className="text-center text-primary font-semibold">{sch.scholarshipName || app.scholarshipName}</td>
                                     <td className="text-center text-primary font-semibold">{sch.universityName || app.universityName}</td>
                                     <td className="text-center text-primary">{sch.country || app.country}</td>
                                     <td className="text-center text-primary">{app.feedback || "-"}</td>
                                     <td className="text-center text-primary">{sch.subjectCategory || app.subjectCategory}</td>
                                     <td className="text-center text-primary">${app.applicationFees}</td>
-                                    <td className={`text-center ${app.applicationStatus === "completed" ?  "text-green-500" : app.applicationStatus === "rejected" ? "text-red-500" : app.applicationStatus === "processing" ? "text-primary" :  "text-secondary" } font-medium`}>{app.applicationStatus}</td>
+                                    <td className={`text-center ${app.applicationStatus === "completed" ? "text-green-500" : app.applicationStatus === "rejected" ? "text-red-500" : app.applicationStatus === "processing" ? "text-primary" : "text-secondary"} font-medium`}>{app.applicationStatus}</td>
                                     <td className="text-center">
                                         {app.paymentStatus === "paid" ? (
                                             <span className="text-center font-semibold text-green-500 ">
@@ -246,19 +247,14 @@ const MyApplications = () => {
                                                         <FaEdit size={18} />
                                                     </button>
 
-                                                  
-
                                                     <button className="text-red-500 hover:text-red-700" onClick={() => handleDelete(app)}>
                                                         <RiDeleteBin6Line size={18} />
                                                     </button>
                                                 </>
                                             )}
 
-
-                                             {app.applicationStatus === "rejected" && (
+                                            {app.applicationStatus === "rejected" && (
                                                 <>
-                                                    
-
                                                     {app.paymentStatus === "unpaid" && (
                                                         <button className=" btn btn-secondary btn-outline  rounded-bl-2xl rounded-tr-2xl text-sm font-semibold" onClick={() => handlePay(app)}>
                                                             Pay
@@ -271,8 +267,6 @@ const MyApplications = () => {
                                                 </>
                                             )}
 
-
-                                       
                                             {app.applicationStatus === "completed" && (
                                                 isAlreadyReviewed(app.scholarshipId) ? (
                                                     <span className="text-green-500 font-semibold">
@@ -305,20 +299,54 @@ const MyApplications = () => {
                                 <Rating
                                     style={{ maxWidth: 200 }}
                                     value={starRating}
-                                    onChange={setStarRating}
+                                    onChange={(value) => {
+                                        setStarRating(value);
+                                    }}
                                 />
+                                {starRating === 0 && (
+                                    <p className="text-red-500 text-sm mt-1">Rating is required</p>
+                                )}
                             </div>
                             <div>
                                 <label className="block font-medium">Comment</label>
-                                <textarea name="comment" rows="4" required className="textarea w-full border-secondary/50 rounded-lg"></textarea>
+                                <textarea
+                                    name="comment"
+                                    rows="4"
+                                    required
+                                    className={`textarea w-full border-secondary/50 rounded-lg ${commentError ? "border-red-500" : ""}`}
+                                    placeholder="Enter your comment (max 200 characters)"
+                                    value={commentText}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        if (value.length <= 200) {
+                                            setCommentText(value);
+                                            setCommentError("");
+                                        } else {
+                                            setCommentError("Comment cannot exceed 200 characters");
+                                        }
+                                    }}
+                                ></textarea>
+                                {commentError && <p className="text-red-500 text-sm mt-1">{commentError}</p>}
+                                <p className="text-gray-500 text-sm mt-1">{commentText.length}/200</p>
                             </div>
                             <div className="flex justify-end gap-2">
-                                <button type="button" className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg" onClick={() => setReviewModal({ isOpen: false, app: null })}>
+                                <button
+                                    type="button"
+                                    className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg"
+                                    onClick={() => setReviewModal({ isOpen: false, app: null })}
+                                >
                                     Cancel
                                 </button>
-                                <button type="submit" className="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-lg">Submit Review</button>
+                                <button
+                                    type="submit"
+                                    className="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-lg"
+                                    disabled={starRating === 0} // Disable submit if rating is 0
+                                >
+                                    Submit Review
+                                </button>
                             </div>
                         </form>
+
                     </div>
                 </div>
             )}

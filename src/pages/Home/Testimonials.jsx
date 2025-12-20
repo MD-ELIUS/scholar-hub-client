@@ -46,7 +46,7 @@ const Testimonials = () => {
                     viewport={{ once: true }}
                     className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary text-center mb-8 flex justify-center items-center gap-3 md:gap-5"
                 >
-                    <GiFairyWings className="text-secondary mt-1" />
+                    <GiFairyWings className="text-secondary " />
                     Success Stories
                 </motion.h2>
 

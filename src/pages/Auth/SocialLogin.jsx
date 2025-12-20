@@ -10,7 +10,7 @@ const SocialLogin = () => {
   const location = useLocation();
   const axiosSecure = useAxiosSecure();
 
-  const [loading, setLoading] = useState(false); // ⭐ added loading state
+  const [loading, setLoading] = useState(false); // loading state
 
   const handleGoogleSignIn = () => {
     setLoading(true); // start loading
@@ -31,7 +31,7 @@ const SocialLogin = () => {
         }).catch(() => setLoading(false)); // stop loading if DB fails
 
         // In case DB saving is skipped
-        if (!axiosSecure) setLoading(false); 
+        if (!axiosSecure) setLoading(false);
       })
       .catch((error) => {
         console.log(error);

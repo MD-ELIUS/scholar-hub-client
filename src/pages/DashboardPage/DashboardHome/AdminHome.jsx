@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import LoadingScreen from "../../../components/Loading/LoadingScreen";
+import LoadingData from "../../../components/Loading/LoadingData";
 
 // Recharts
 import {
@@ -15,7 +15,6 @@ import {
 
 // Animation
 import { motion } from "framer-motion";
-import LoadingData from "../../../components/Loading/LoadingData";
 
 const AdminHome = () => {
   const axiosSecure = useAxiosSecure();
@@ -29,15 +28,26 @@ const AdminHome = () => {
     },
   });
 
-  // FIXED scholarships to always be array
+  // FETCH SCHOLARSHIPS (LIMIT=1) FOR TOTAL COUNT
   const { data: scholarshipsData = {}, isLoading: scholarshipLoading } = useQuery({
     queryKey: ["scholarships"],
     queryFn: async () => {
-      const res = await axiosSecure.get("/scholarships");
+      const res = await axiosSecure.get("/scholarships?limit=1&page=1"); // only need totalCount
       return res.data;
     },
   });
+
   const scholarships = scholarshipsData.scholarships || [];
+  const totalScholarships = scholarshipsData.totalCount || 0; // use totalCount from backend
+
+  // FETCH ALL SCHOLARSHIPS FOR CHARTS
+  const { data: allScholarships = [], isLoading: allScholarshipsLoading } = useQuery({
+    queryKey: ["allScholarshipsForCharts"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/scholarships?limit=10000&page=1"); // large limit
+      return res.data.scholarships || [];
+    },
+  });
 
   const { data: applications = [], isLoading: appLoading } = useQuery({
     queryKey: ["applications"],
@@ -47,22 +57,21 @@ const AdminHome = () => {
     },
   });
 
-  if (userLoading || scholarshipLoading || appLoading) {
+  if (userLoading || scholarshipLoading || appLoading || allScholarshipsLoading) {
     return <LoadingData />;
   }
 
   /* ================= CALCULATIONS ================= */
   const totalUsers = users.length;
-  const totalScholarships = scholarships.length;
   const totalApplications = applications.length;
 
-  const expiredScholarships = scholarships.filter(
+  const expiredScholarships = allScholarships.filter(
     (s) => new Date(s.deadline) < new Date()
   ).length;
 
   /* ================= SUBJECT CATEGORY PIE ================= */
   const subjectMap = {};
-  scholarships.forEach((s) => {
+  allScholarships.forEach((s) => {
     const key = s.subjectCategory || "Unknown";
     subjectMap[key] = (subjectMap[key] || 0) + 1;
   });
@@ -74,7 +83,7 @@ const AdminHome = () => {
 
   /* ================= FUND CATEGORY PIE ================= */
   const fundMap = {};
-  scholarships.forEach((s) => {
+  allScholarships.forEach((s) => {
     const key = s.scholarshipCategory || "Unknown";
     fundMap[key] = (fundMap[key] || 0) + 1;
   });
@@ -172,7 +181,7 @@ const AdminHome = () => {
             Scholarship by Fund Category
           </h2>
 
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={320}>
             <PieChart>
               <Pie
                 data={fundPieData}

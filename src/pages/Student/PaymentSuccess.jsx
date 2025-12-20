@@ -13,9 +13,9 @@ const PaymentSuccess = () => {
   const [metadata, setMetadata] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const alertShownRef = useRef(false); // ✅ KEY FIX
+  const alertShownRef = useRef(false);
 
-  // 🔹 Step 1: Confirm payment & get metadata
+  // Step 1: Confirm payment & get metadata
   useEffect(() => {
     if (!sessionId || alertShownRef.current) return;
 
@@ -32,7 +32,7 @@ const PaymentSuccess = () => {
               "Your application is confirmed!",
               "success"
             );
-            alertShownRef.current = true; // ✅ mark as shown
+            alertShownRef.current = true; //  mark as shown
           }
         }
       } catch (error) {
@@ -48,7 +48,7 @@ const PaymentSuccess = () => {
     confirmPayment();
   }, [sessionId, axiosSecure]);
 
-  // 🔹 Step 2: Fetch scholarship using scholarshipId
+  // Step 2: Fetch scholarship using scholarshipId
   const { data: scholarship, isLoading: scholarshipLoading } = useQuery({
     queryKey: ["singleScholarship", metadata?.scholarshipId],
     enabled: !!metadata?.scholarshipId,

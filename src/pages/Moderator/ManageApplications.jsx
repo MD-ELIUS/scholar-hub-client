@@ -15,6 +15,7 @@ const ManageApplications = () => {
     const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
     const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
     const [feedbackText, setFeedbackText] = useState("");
+    const [feedbackError, setFeedbackError] = useState("");
 
     // Fetch all applications
     const { data: applications = [], isLoading } = useQuery({
@@ -129,7 +130,7 @@ const ManageApplications = () => {
                                 <td className="text-center text-primary">{app.userName}</td>
                                 <td className="text-center text-primary">{app.userEmail}</td>
                                 <td className="text-center text-primary">{app.universityName}</td>
-                                <td className="text-center text-primary">{app.feedback || "-"}</td>
+                                <td className="text-center text-primary max-w-[200px] truncate">{app.feedback || "-"}</td>
                                 <td className={`text-center ${app.applicationStatus === "completed" ? "text-green-500" : app.applicationStatus === "rejected" ? "text-red-500" : app.applicationStatus === "processing" ? "text-primary" : "text-secondary"} font-medium`}>{app.applicationStatus}</td>
                                 <td
                                     className={`text-center font-semibold ${app.paymentStatus === "paid" ? "text-primary" : "text-secondary"
@@ -157,7 +158,7 @@ const ManageApplications = () => {
                                         </button>
 
                                         <select
-                                            className="select select-bordered rounded-bl-2xl rounded-tr-2xl select-sm"
+                                            className="select select-bordered rounded-bl-2xl rounded-tr-2xl select-sm min-w-[100px]"
                                             value={app.applicationStatus}
                                             onChange={(e) => updateStatus(app, e.target.value)}
                                         >
@@ -210,6 +211,7 @@ const ManageApplications = () => {
             )}
 
             {/* Feedback Modal */}
+            {/* Feedback Modal */}
             {isFeedbackModalOpen && selectedApplication && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
                     <div className="relative w-full max-w-2xl bg-white rounded-bl-2xl rounded-tr-2xl border border-primary/30 shadow-xl p-6">
@@ -222,13 +224,28 @@ const ManageApplications = () => {
                         <h3 className="text-xl font-semibold text-primary mb-4">
                             Give Feedback for {selectedApplication.userName}
                         </h3>
+
                         <textarea
-                            className="textarea outline-none w-full border-secondary/50 rounded-bl-2xl rounded-tr-2xl mb-4"
+                            className="textarea outline-none w-full border-secondary/50 rounded-bl-2xl rounded-tr-2xl mb-1"
                             rows={5}
+                            placeholder="Enter feedback (max 200 characters)"
                             value={feedbackText}
-                            onChange={(e) => setFeedbackText(e.target.value)}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                if (value.length <= 200) {
+                                    setFeedbackText(value);
+                                    setFeedbackError("");
+                                } else {
+                                    setFeedbackError("Feedback cannot exceed 200 characters");
+                                }
+                            }}
                         ></textarea>
-                        <div className="flex justify-end gap-2">
+                        {feedbackError && (
+                            <p className="text-red-500 text-sm mt-1">{feedbackError}</p>
+                        )}
+                        <p className="text-gray-500 text-sm mt-1">{feedbackText.length}/200</p>
+
+                        <div className="flex justify-end gap-2 mt-2">
                             <button
                                 className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-bl-2xl rounded-tr-2xl"
                                 onClick={() => setIsFeedbackModalOpen(false)}
@@ -238,6 +255,7 @@ const ManageApplications = () => {
                             <button
                                 className="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-bl-2xl rounded-tr-2xl"
                                 onClick={submitFeedback}
+                                disabled={feedbackText.length > 200}
                             >
                                 Submit Feedback
                             </button>
@@ -245,6 +263,7 @@ const ManageApplications = () => {
                     </div>
                 </div>
             )}
+
         </div>
     );
 };

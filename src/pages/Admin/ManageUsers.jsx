@@ -20,7 +20,7 @@ const ManageUsers = () => {
   const [filterRole, setFilterRole] = useState('');
 
   // ==== GET USERS ====
-  const { refetch, data: users = [] , isLoading } = useQuery({
+  const { refetch, data: users = [], isLoading } = useQuery({
     queryKey: ['users', searchText, filterRole],
     queryFn: async () => {
       const res = await axiosSecure.get(
@@ -36,10 +36,10 @@ const ManageUsers = () => {
       .then(res => {
         if (res.data.modifiedCount > 0) {
 
-          // 🔁 refetch users list
+          // refetch users list
           refetch();
 
-          // 🔥 if logged-in user's role changed → refetch role
+          // if logged-in user's role changed → refetch role
           if (user.email === loggedUser?.email) {
             refetchRole();
           }
@@ -89,7 +89,7 @@ const ManageUsers = () => {
     return "No users found.";
   };
 
-  
+
 
   return (
     <div>

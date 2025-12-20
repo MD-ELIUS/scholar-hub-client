@@ -7,7 +7,8 @@ import { IoClose } from "react-icons/io5";
 
 const EditScholarshipModal = ({ scholarship, onUpdated, onClose }) => {
   const axiosSecure = useAxiosSecure();
-  const { register, handleSubmit, setValue } = useForm();
+  // Added errors to destructuring
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm();
   const [loading, setLoading] = useState(false);
 
   // ---------------------- COUNTRY API ----------------------
@@ -24,8 +25,8 @@ const EditScholarshipModal = ({ scholarship, onUpdated, onClose }) => {
   const [selectedCountry, setSelectedCountry] = useState("");
   const filteredCountries = countryInput
     ? countryData.filter((c) =>
-        c.country.toLowerCase().includes(countryInput.toLowerCase())
-      )
+      c.country.toLowerCase().includes(countryInput.toLowerCase())
+    )
     : [];
 
   const handleCountrySelect = (country) => {
@@ -51,7 +52,7 @@ const EditScholarshipModal = ({ scholarship, onUpdated, onClose }) => {
         "serviceCharge",
         "totalAmount",
         "deadline",
-        "description", // ✅ added
+        "description",
       ];
       fields.forEach((field) => setValue(field, scholarship[field]));
 
@@ -70,7 +71,6 @@ const EditScholarshipModal = ({ scholarship, onUpdated, onClose }) => {
         userEmail: scholarship.userEmail,
       };
 
-      // Upload new image if provided
       if (data.image && data.image.length > 0) {
         const formData = new FormData();
         formData.append("image", data.image[0]);
@@ -107,8 +107,8 @@ const EditScholarshipModal = ({ scholarship, onUpdated, onClose }) => {
   };
 
   const inputStyle = "input input-bordered w-full rounded-tr-2xl rounded-bl-2xl";
-  const fileStyle =
-    "file-input file-input-bordered w-full rounded-tr-2xl rounded-bl-2xl";
+  const fileStyle = "file-input file-input-bordered w-full rounded-tr-2xl rounded-bl-2xl";
+  const errorMsg = "text-red-500 text-xs mt-1 font-semibold"; // Common error style
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-3">
@@ -132,9 +132,10 @@ const EditScholarshipModal = ({ scholarship, onUpdated, onClose }) => {
             <label className="text-sm">Scholarship Name</label>
             <input
               type="text"
-              {...register("scholarshipName", { required: true })}
+              {...register("scholarshipName", { required: "Name is required" })}
               className={inputStyle}
             />
+            {errors.scholarshipName && <p className={errorMsg}>{errors.scholarshipName.message}</p>}
           </div>
 
           {/* University Name */}
@@ -142,9 +143,10 @@ const EditScholarshipModal = ({ scholarship, onUpdated, onClose }) => {
             <label className="text-sm">University Name</label>
             <input
               type="text"
-              {...register("universityName", { required: true })}
+              {...register("universityName", { required: "University is required" })}
               className={inputStyle}
             />
+            {errors.universityName && <p className={errorMsg}>{errors.universityName.message}</p>}
           </div>
 
           {/* Image */}
@@ -166,7 +168,7 @@ const EditScholarshipModal = ({ scholarship, onUpdated, onClose }) => {
               <label className="text-sm">Country</label>
               <input
                 type="text"
-                {...register("country", { required: true })}
+                {...register("country", { required: "Country is required" })}
                 value={countryInput}
                 onChange={(e) => {
                   setCountryInput(e.target.value);
@@ -174,6 +176,7 @@ const EditScholarshipModal = ({ scholarship, onUpdated, onClose }) => {
                 }}
                 className={inputStyle}
               />
+              {errors.country && <p className={errorMsg}>{errors.country.message}</p>}
               {countryInput && !selectedCountry && (
                 <div className="absolute w-full mt-1 max-h-40 overflow-y-auto bg-white border rounded-lg z-50 shadow-lg">
                   {filteredCountries.map((c, i) => (
@@ -193,12 +196,12 @@ const EditScholarshipModal = ({ scholarship, onUpdated, onClose }) => {
               <label className="text-sm">City</label>
               <input
                 type="text"
-                {...register("city", { required: true })}
+                {...register("city", { required: "City is required" })}
                 disabled={!selectedCountry}
-                className={`${inputStyle} ${
-                  !selectedCountry ? "bg-gray-200 cursor-not-allowed" : ""
-                }`}
+                className={`${inputStyle} ${!selectedCountry ? "bg-gray-200 cursor-not-allowed" : ""
+                  }`}
               />
+              {errors.city && <p className={errorMsg}>{errors.city.message}</p>}
             </div>
           </div>
 
@@ -206,17 +209,18 @@ const EditScholarshipModal = ({ scholarship, onUpdated, onClose }) => {
           <div className="grid md:grid-cols-3 gap-4">
             <div>
               <label className="text-sm">Degree</label>
-              <select {...register("degree", { required: true })} className={inputStyle}>
+              <select {...register("degree", { required: "Required" })} className={inputStyle}>
                 <option value="">Select Degree</option>
                 <option value="Bachelor">Bachelor</option>
                 <option value="Postgraduate">Postgraduate</option>
                 <option value="PhD">PhD</option>
                 <option value="Diploma">Diploma</option>
               </select>
+              {errors.degree && <p className={errorMsg}>{errors.degree.message}</p>}
             </div>
             <div>
               <label className="text-sm">Subject Category</label>
-              <select {...register("subjectCategory", { required: true })} className={inputStyle}>
+              <select {...register("subjectCategory", { required: "Required" })} className={inputStyle}>
                 <option value="">Select Subject Category</option>
                 <option value="Engineering">Engineering</option>
                 <option value="Medical">Medical</option>
@@ -224,10 +228,11 @@ const EditScholarshipModal = ({ scholarship, onUpdated, onClose }) => {
                 <option value="Arts">Arts</option>
                 <option value="Science">Science</option>
               </select>
+              {errors.subjectCategory && <p className={errorMsg}>{errors.subjectCategory.message}</p>}
             </div>
             <div>
               <label className="text-sm">Scholarship Category</label>
-              <select {...register("scholarshipCategory", { required: true })} className={inputStyle}>
+              <select {...register("scholarshipCategory", { required: "Required" })} className={inputStyle}>
                 <option value="">Select Scholarship Category</option>
                 <option value="Fully Funded">Fully Funded</option>
                 <option value="Partially Funded">Partially Funded</option>
@@ -236,46 +241,57 @@ const EditScholarshipModal = ({ scholarship, onUpdated, onClose }) => {
                   Living Expenses Covered
                 </option>
               </select>
+              {errors.scholarshipCategory && <p className={errorMsg}>{errors.scholarshipCategory.message}</p>}
             </div>
           </div>
 
-          {/* ✅ Scholarship Description */}
+          {/* Scholarship Description - Validation Added Here */}
           <div>
             <label className="text-sm">Scholarship Description</label>
             <textarea
-              {...register("description", { required: true })}
+              {...register("description", {
+                required: "Description is required",
+                minLength: { value: 2000, message: "Minimum 2000 characters required" },
+                maxLength: { value: 2500, message: "Maximum 2500 characters allowed" }
+              })}
               rows={8}
-              placeholder="Enter full scholarship details (eligibility, benefits, application process, documents, etc.)"
+              placeholder="Enter full scholarship details..."
               className="textarea w-full rounded-tr-2xl rounded-bl-2xl border"
             />
+            {errors.description && <p className={errorMsg}>{errors.description.message}</p>}
           </div>
 
           {/* Fees + Deadline */}
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <label className="text-sm">Tuition Fees</label>
-              <input type="number" {...register("tuitionFees")} className={inputStyle} />
+              <label className="text-sm">Tuition Fees (optional) </label>
+              <input type="number" {...register("tuitionFees",)} className={inputStyle} />
+
             </div>
             <div>
               <label className="text-sm">Total Amount</label>
-              <input type="number" {...register("totalAmount", { required: true })} className={inputStyle} />
+              <input type="number" {...register("totalAmount", { required: "Required" })} className={inputStyle} />
+              {errors.totalAmount && <p className={errorMsg}>{errors.totalAmount.message}</p>}
             </div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <label className="text-sm">Application Fees</label>
-              <input type="number" {...register("applicationFees", { required: true })} className={inputStyle} />
+              <input type="number" {...register("applicationFees", { required: "Required" })} className={inputStyle} />
+              {errors.applicationFees && <p className={errorMsg}>{errors.applicationFees.message}</p>}
             </div>
             <div>
               <label className="text-sm">Service Charge</label>
-              <input type="number" {...register("serviceCharge", { required: true })} className={inputStyle} />
+              <input type="number" {...register("serviceCharge", { required: "Required" })} className={inputStyle} />
+              {errors.serviceCharge && <p className={errorMsg}>{errors.serviceCharge.message}</p>}
             </div>
           </div>
 
           <div>
             <label className="text-sm">Deadline</label>
-            <input type="date" {...register("deadline", { required: true })} className={inputStyle} />
+            <input type="date" {...register("deadline", { required: "Deadline is required" })} className={inputStyle} />
+            {errors.deadline && <p className={errorMsg}>{errors.deadline.message}</p>}
           </div>
 
           {/* Post Date + User Email */}

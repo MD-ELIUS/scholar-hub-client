@@ -11,7 +11,7 @@ import useRole from "../../hooks/useRole";
 const MyProfile = () => {
   const { user } = useAuth();
   const [openEdit, setOpenEdit] = useState(false);
-  const {role} = useRole() ;
+  const { role } = useRole();
   return (
     <div className="w-full flex flex-col lg:flex-row items-center lg:items-start gap-6">
 
@@ -25,7 +25,7 @@ const MyProfile = () => {
       {/* Profile Info */}
       <div className="w-full lg:w-1/2">
         <div className="bg-white shadow-lg rounded-bl-2xl rounded-tr-2xl p-6 border border-secondary/50">
-          
+
           {/* Header */}
           <div className="flex items-center gap-4">
             <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-primary shadow">
@@ -47,23 +47,23 @@ const MyProfile = () => {
           {/* Divider */}
           <div className="border-b my-5 border-secondary/20"></div>
 
-         {/* Details */}
-<div className="space-y-4">
-  <div>
-    <p className="text-sm text-gray-500">Email</p>
-    <p className="font-medium text-primary">{user?.email}</p>
-  </div>
+          {/* Details */}
+          <div className="space-y-4">
+            <div>
+              <p className="text-sm text-gray-500">Email</p>
+              <p className="font-medium text-primary">{user?.email}</p>
+            </div>
 
-  <div>
-    <p className="text-sm text-gray-500">Account Created</p>
-    <p className="font-medium">{user?.metadata?.creationTime}</p>
-  </div>
+            <div>
+              <p className="text-sm text-gray-500">Account Created</p>
+              <p className="font-medium">{user?.metadata?.creationTime}</p>
+            </div>
 
-  <div>
-    <p className="text-sm text-gray-500">Last Login</p>
-    <p className="font-medium">{user?.metadata?.lastSignInTime}</p>
-  </div>
-</div>
+            <div>
+              <p className="text-sm text-gray-500">Last Login</p>
+              <p className="font-medium">{user?.metadata?.lastSignInTime}</p>
+            </div>
+          </div>
 
 
           {/* Edit Button */}

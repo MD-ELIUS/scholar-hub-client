@@ -99,7 +99,7 @@ const Payment = () => {
       <h2 className="text-2xl font-bold text-primary">
         Pay for Scholarship: {scholarship.scholarshipName}
       </h2>
-      
+
       <p className="text-lg">
         Application Fee: ${Number(scholarship.applicationFees)} <br />
         Service Charge: ${Number(scholarship.serviceCharge)} <br />
