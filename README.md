@@ -1,6 +1,6 @@
 # ScholarHub  🎓
 
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](#)
 [![React](https://img.shields.io/badge/React-17.0.2-blue.svg)](https://reactjs.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-18.x-green.svg)](https://nodejs.org/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-6.x-green.svg)](https://www.mongodb.com/)
@@ -11,7 +11,9 @@
 **ScholarHub** is a full-stack MERN scholarship management platform designed to connect students with scholarship opportunities worldwide. Universities or organizations can post scholarships, while students can search, apply, and review them. The platform simplifies the process of discovering and managing financial aid for higher education.
 
 **Live Demo:** [ScholarHub Live Site](https://scholar-hub-client.web.app)
+
 **Client Repository:** [ScholarHub Client Repo](https://github.com/MD-ELIUS/scholar-hub-client)
+
 **Server Repository:** [ScholarHub Server Repo](https://github.com/MD-ELIUS/scholar-hub-server)
 
 
@@ -64,10 +66,10 @@
 | Database       | MongoDB                     |
 | Authentication | Firebase Auth (Email/Google) |
 | Payment        | Stripe API                  |
-| Deployment     | Vercel (Client), Render/Heroku (Server) |
+| Deployment     | Vercel (Client) |
 
 ---
-
+ 
 ## 🗂 Database Collections
 
 ### Users Collection
@@ -99,6 +101,7 @@ cd scholarhub-server
 npm install
 cp .env.example .env  # configure DB_USER, DB_PASS, JWT_SECRET, STRIPE_SECRET
 npm start
+```
 
 ### Frontend
 ```bash
