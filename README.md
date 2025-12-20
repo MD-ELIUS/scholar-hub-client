@@ -92,6 +92,31 @@
 
 ---
 
+### NPM Packages Used
+
+ScholarHub uses several npm packages to enhance functionality, UI, and development workflow:
+
+- **@smastrom/react-rating** – For interactive star rating components.
+- **@tailwindcss/vite** & **tailwindcss** – Tailwind CSS integration with Vite for utility-first styling.
+- **@tanstack/react-query** – For efficient server-state management and data fetching.
+- **axios** – Promise-based HTTP client for API requests.
+- **firebase** – Authentication and user management.
+- **lottie-react** – Animations for interactive UI elements.
+- **lucide-react** & **react-icons** – Icon components for dashboard and UI elements.
+- **motion** – Animation library for smooth UI transitions.
+- **react-hook-form** – Easy and performant form handling.
+- **react-router** – Client-side routing.
+- **recharts** – Charts and data visualization for analytics.
+- **sweetalert2** – Alert and modal dialogs.
+- **swiper** – Carousel/slideshow components.
+- **daisyui** – Tailwind CSS plugin for pre-built components.
+
+**Dev Dependencies**:  
+- **vite**, **@vitejs/plugin-react** – Build and dev tooling.  
+- **eslint**, **@eslint/js**, **eslint-plugin-react-hooks**, **eslint-plugin-react-refresh** – Code linting and quality enforcement.  
+- **@types/react**, **@types/react-dom**, **globals** – Type definitions for better development experience.
+
+
 ## 🚀 Installation & Setup
 
 ### Backend
