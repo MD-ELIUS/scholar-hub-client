@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { FiXCircle } from "react-icons/fi";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { Rating } from "@smastrom/react-rating";
+import LoadingData from "../../components/Loading/LoadingData";
 
 const AllReviews = () => {
     const axiosSecure = useAxiosSecure();
@@ -73,8 +74,8 @@ const AllReviews = () => {
                     <tbody>
                         {isLoading && (
                             <tr>
-                                <td colSpan="7" className="text-center py-10 text-primary">
-                                    Loading...
+                                <td colSpan="7" className="text-center -mt-10 text-primary">
+                                   <LoadingData></LoadingData>
                                 </td>
                             </tr>
                         )}

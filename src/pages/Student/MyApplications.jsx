@@ -199,8 +199,8 @@ const MyApplications = () => {
                     <tbody>
                         {isLoading && (
                             <tr>
-                                <td colSpan="9" className="text-center py-10 text-primary">
-                                    Loading...
+                                <td colSpan="9" className="text-center -mt-10 text-primary">
+                                <LoadingData></LoadingData>
                                 </td>
                             </tr>
                         )}
@@ -224,48 +224,30 @@ const MyApplications = () => {
                                     <td className="text-center text-primary">{sch.subjectCategory || app.subjectCategory}</td>
                                     <td className="text-center text-primary">${app.applicationFees}</td>
                                     <td className={`text-center ${app.applicationStatus === "completed" ? "text-green-500" : app.applicationStatus === "rejected" ? "text-red-500" : app.applicationStatus === "processing" ? "text-primary" : "text-secondary"} font-medium`}>{app.applicationStatus}</td>
-                                    <td className="text-center">
-                                        {app.paymentStatus === "paid" ? (
-                                            <span className="text-center font-semibold text-green-500 ">
-                                                {app.paymentStatus}
-                                            </span>
-                                        ) : (
-                                            <button className=" btn btn-secondary btn-outline  rounded-bl-2xl rounded-tr-2xl px-2 py-1  text-sm font-semibold" onClick={() => handlePay(app)}>
-                                                Pay
-                                            </button>
-                                        )}
-                                    </td>
+                                    <td className={`text-center ${app.paymentStatus === "paid" ? "text-green-500" : "text-red-500"}`}> {app.paymentStatus}</td>
                                     <td className="text-center">
                                         <div className="inline-flex gap-2 justify-center items-center">
                                             <button className="text-secondary hover:text-primary" onClick={() => handleView(app)}>
                                                 <FaEye size={18} />
                                             </button>
-
-                                            {app.applicationStatus === "pending" && (
+                                             {app.applicationStatus === "pending" && (
                                                 <>
-                                                    <button className="text-blue-500 hover:text-primary" onClick={() => handleEdit(app)}>
+                                                  <button className="text-blue-500 hover:text-primary" onClick={() => handleEdit(app)}>
                                                         <FaEdit size={18} />
                                                     </button>
 
-                                                    <button className="text-red-500 hover:text-red-700" onClick={() => handleDelete(app)}>
+                                                      <button className="text-red-500 hover:text-red-700" onClick={() => handleDelete(app)}>
                                                         <RiDeleteBin6Line size={18} />
                                                     </button>
                                                 </>
-                                            )}
+                                             )}
 
-                                            {app.applicationStatus === "rejected" && (
-                                                <>
-                                                    {app.paymentStatus === "unpaid" && (
+                                              {app.paymentStatus === "unpaid" && (
                                                         <button className=" btn btn-secondary btn-outline  rounded-bl-2xl rounded-tr-2xl text-sm font-semibold" onClick={() => handlePay(app)}>
                                                             Pay
                                                         </button>
                                                     )}
 
-                                                    <button className="text-red-500 hover:text-red-700" onClick={() => handleDelete(app)}>
-                                                        <RiDeleteBin6Line size={18} />
-                                                    </button>
-                                                </>
-                                            )}
 
                                             {app.applicationStatus === "completed" && (
                                                 isAlreadyReviewed(app.scholarshipId) ? (

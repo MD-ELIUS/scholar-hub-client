@@ -4,7 +4,7 @@ import loadingAnimation from "../../assets/lottie/loading-animation.json";
 
 const LoadingData = ({ height = 100 }) => {
   return (
-    <div className="w-full flex justify-center items-center flex-col ">
+    <div className="w-full flex justify-center items-center flex-col min-h-[60vh] ">
       <div style={{ height }}>
         <Lottie
           animationData={loadingAnimation}

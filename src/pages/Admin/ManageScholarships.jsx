@@ -6,6 +6,7 @@ import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import EditScholarshipModal from "./EditScholarshipModal";
 import { IoClose } from "react-icons/io5";
+import LoadingData from "../../components/Loading/LoadingData";
 
 const ManageScholarships = () => {
   const axiosSecure = useAxiosSecure();
@@ -143,8 +144,8 @@ const ManageScholarships = () => {
           <tbody>
             {isLoading && (
               <tr>
-                <td colSpan="8" className="text-center py-10 text-primary">
-                  Loading...
+                <td colSpan="8" className="text-center -mt-10 text-primary">
+                 <LoadingData></LoadingData>
                 </td>
               </tr>
             )}

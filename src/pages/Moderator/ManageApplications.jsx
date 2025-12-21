@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { IoClose } from "react-icons/io5";
 import { FiEye, FiEdit2, FiXCircle } from "react-icons/fi";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import LoadingData from "../../components/Loading/LoadingData";
 
 
 const ManageApplications = () => {
@@ -110,8 +111,8 @@ const ManageApplications = () => {
                     <tbody>
                         {isLoading && (
                             <tr>
-                                <td colSpan="8" className="text-center py-10 text-primary">
-                                    Loading...
+                                <td colSpan="8" className="text-center -mt-10 text-primary">
+                                  <LoadingData></LoadingData>
                                 </td>
                             </tr>
                         )}

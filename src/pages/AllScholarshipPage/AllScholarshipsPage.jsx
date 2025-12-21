@@ -4,6 +4,7 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import ScholarshipCard from "../../components/ScholarshipCard";
 import { useLocation } from "react-router";
 import useTitle from "../../hooks/useTitle";
+import LoadingData from "../../components/Loading/LoadingData";
 
 const AllScholarshipsPage = () => {
   useTitle("All Scholarships");
@@ -129,9 +130,7 @@ const AllScholarshipsPage = () => {
 
       {/* GRID */}
       {isLoading ? (
-        <p className="text-center py-10 text-primary">
-          Loading scholarships...
-        </p>
+       <LoadingData></LoadingData>
       ) : scholarships.length === 0 ? (
         <p className="text-center py-10 text-primary opacity-70">
           No scholarships found.

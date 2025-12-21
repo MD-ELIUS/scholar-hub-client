@@ -7,6 +7,7 @@ import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
+import LoadingData from "../../components/Loading/LoadingData";
 
 const MyReviews = () => {
     const axiosSecure = useAxiosSecure();
@@ -112,8 +113,8 @@ const MyReviews = () => {
                     <tbody>
                         {isLoading && (
                             <tr>
-                                <td colSpan="7" className="text-center py-10 text-primary">
-                                    Loading...
+                                <td colSpan="7" className="text-center -mt-10 text-primary">
+                                   <LoadingData></LoadingData>
                                 </td>
                             </tr>
                         )}

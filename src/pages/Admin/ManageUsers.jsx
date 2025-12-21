@@ -136,8 +136,8 @@ const ManageUsers = () => {
 
             {isLoading && (
               <tr>
-                <td colSpan="8" className="text-center py-10 text-primary">
-                  Loading...
+                <td colSpan="8" className="text-center -mt-10 text-primary">
+                <LoadingData></LoadingData>
                 </td>
               </tr>
             )}

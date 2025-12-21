@@ -18,6 +18,7 @@ import useAuth from "../../hooks/useAuth";
 import useRole from "../../hooks/useRole";
 import axios from "axios";
 import useTitle from "../../hooks/useTitle";
+import LoadingData from "../../components/Loading/LoadingData"
 
 const ScholarshipDetailsPage = () => {
   useTitle("Scholarship Details");
@@ -70,11 +71,7 @@ const ScholarshipDetailsPage = () => {
   };
 
   if (authLoading || isLoading || appLoading || isFetching) {
-    return (
-      <div className="flex justify-center items-center min-h-[60vh]">
-        <span className="loading loading-spinner loading-lg text-primary"></span>
-      </div>
-    );
+    return <LoadingData></LoadingData>
   }
 
   // Check if query should be enabled
@@ -85,21 +82,12 @@ const ScholarshipDetailsPage = () => {
   // 2. Query has finished loading
   // 3. Still no data
   if (!scholarship && queryIsEnabled && !isLoading && !isFetching) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
-        <h2 className="text-2xl font-bold text-gray-400">Scholarship Not Found</h2>
-        <Link to="/" className="btn btn-primary">Go Home</Link>
-      </div>
-    );
+    return <LoadingData></LoadingData>
   }
 
   // If query is not enabled yet (waiting for auth), keep showing loading
   if (!scholarship) {
-    return (
-      <div className="flex justify-center items-center min-h-[60vh]">
-        <span className="loading loading-spinner loading-lg text-primary"></span>
-      </div>
-    );
+    return <LoadingData></LoadingData>
   }
 
   const {
@@ -312,7 +300,7 @@ const ScholarshipDetailsPage = () => {
                           </div>
                           <Link
                             to='/dashboard/my-applications'
-                            className="btn btn-outline btn-primary w-full shadow-none hover:shadow-md transition-shadow rounded-bl-2xl rounded-tr-2xl"
+                            className="btn btn-outline btn-secondary text-primary hover:text-white  w-full shadow-none hover:shadow-md transition-shadow rounded-bl-2xl rounded-tr-2xl"
                           >
                             View Application
                           </Link>
@@ -320,7 +308,7 @@ const ScholarshipDetailsPage = () => {
                       ) : (
                         <Link
                           to={`/dashboard/payment/${scholarship._id}`}
-                          className="btn btn-primary w-full text-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 animate-pulse-slow rounded-bl-2xl rounded-tr-2xl"
+                          className="btn btn-secondary btn-outline text-primary hover:text-white w-full text-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 animate-pulse-slow rounded-bl-2xl rounded-tr-2xl"
                         >
                           Apply Now <FaArrowRight />
                         </Link>
@@ -359,7 +347,7 @@ const ScholarshipDetailsPage = () => {
           ) : (
             <button
               onClick={scrollToApply}
-              className="btn btn-primary rounded-bl-2xl rounded-tr-2xl shadow-lg px-8 text-white"
+              className="btn btn-secondary btn-outline text-primary hover:text-white rounded-bl-2xl rounded-tr-2xl shadow-lg px-8 "
             >
               Apply Now
             </button>
